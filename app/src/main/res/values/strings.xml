@@ -1,3 +1,11 @@
 <resources>
+<!--  Login -->
     <string name="app_name">clubdeportivo</string>
+    <string name="app_logo">logo del club deportivo</string>
+    <string name="app_icon_user">icono de usuario</string>
+    <string name="app_icon_lock">icono de contraseña</string>
+    <string name="login_user_hint">Usuario</string>
+    <string name="login_pass_hint">Contraseña</string>
+    <string name="login">ingresar</string>
+
 </resources>

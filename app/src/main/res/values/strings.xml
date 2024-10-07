@@ -7,5 +7,19 @@
     <string name="login_user_hint">Usuario</string>
     <string name="login_pass_hint">Contraseña</string>
     <string name="login">ingresar</string>
-
+<!--Main Menu-->
+    <string name="user_icon">icono de usuario</string>
+    <string name="user_name_example">Fernando Ray</string>
+    <string name="user_role_example">Administrador</string>
+    <string name="menu_actions">Acciones disponibles</string>
+    <string name="pencil_icon">icono de lápiz</string>
+    <string name="register_client">Registrar cliente</string>
+    <string name="arrow_right_icon">icono de flecha hacia la derecha</string>
+    <string name="money_icon">icono de dinero</string>
+    <string name="pay_membership">Abonar cuota</string>
+    <string name="list_icon">icono de lista</string>
+    <string name="list_club_members">Listar socios…</string>
+    <string name="logout_icon">icono de cerrar sesión</string>
+    <string name="logout">Cerrar sesión</string>
+    
 </resources>

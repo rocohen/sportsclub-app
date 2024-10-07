@@ -1,5 +1,5 @@
 <resources>
-<!--  Login -->
+    <!--  Login -->
     <string name="app_name">clubdeportivo</string>
     <string name="app_logo">logo del club deportivo</string>
     <string name="app_icon_user">icono de usuario</string>
@@ -7,5 +7,38 @@
     <string name="login_user_hint">Usuario</string>
     <string name="login_pass_hint">Contraseña</string>
     <string name="login">ingresar</string>
+    <!--Main Menu-->
+    <string name="user_icon">icono de usuario</string>
+    <string name="user_name_example">Fernando Ray</string>
+    <string name="user_role_example">Administrador</string>
+    <string name="menu_actions">Acciones disponibles</string>
+    <string name="pencil_icon">icono de lápiz</string>
+    <string name="register_client">Registrar cliente</string>
+    <string name="arrow_right_icon">icono de flecha hacia la derecha</string>
+    <string name="money_icon">icono de dinero</string>
+    <string name="pay_membership">Abonar cuota</string>
+    <string name="list_icon">icono de lista</string>
+    <string name="list_club_members">Listar socios…</string>
+    <string name="logout_icon">icono de cerrar sesión</string>
+    <string name="logout">Cerrar sesión</string>
+    <!--Register client activity-->
+    <string name="arrow_back_icon">icono de volver</string>
+    <string name="client_register_title">Registro de cliente</string>
+    <string name="name_placeholder">Nombre</string>
+    <string name="surname_placeholder">Apellido</string>
+    <string name="phone_placeholder">Teléfono</string>
+    <string name="email_placeholder">Correo</string>
+    <string name="dni_placeholder">DNI</string>
+    <string name="club_client_type_placeholder">Tipo de cliente</string>
+    <string name="club_client_type_description">Tipo de cliente del club deportivo</string>
+    <string name="health_check_title">Tiene apto físico</string>
+    <string name="required_notice">Todos los campos son obligatorios</string>
+    <string name="register_btn">Registrar</string>
+
+    <!--  String array for client type dropdown component-->
+    <string-array name="client_type">
+        <item>Socio</item>
+        <item>No Socio</item>
+    </string-array>
 
 </resources>

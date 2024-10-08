@@ -1,5 +1,5 @@
 <resources>
-<!--  Login -->
+    <!--  Login -->
     <string name="app_name">clubdeportivo</string>
     <string name="app_logo">logo del club deportivo</string>
     <string name="app_icon_user">icono de usuario</string>
@@ -7,5 +7,32 @@
     <string name="login_user_hint">Usuario</string>
     <string name="login_pass_hint">Contraseña</string>
     <string name="login">ingresar</string>
+    <string name="btn_send">enviar</string>
+
+
+    <!-- Payment Receipt -->
+    <string name="comp_pago">comprobante de pago</string>
+    <string name="app_back_button">Botón de volver atrás</string>
+    <string name="app_home_button">Botón para regresar al menú</string>
+    <string name="client_id">ID Cliente</string>
+    <string name="receipt_date">Fecha</string>
+    <string name="expiration_date">Fecha de Vencimiento</string>
+    <string name="payment_method">Forma de Pago</string>
+    <string name="data_client_id">001</string>
+    <string name="data_receipt_date">01-10-24</string>
+    <string name="data_expiration_date">01-11-24</string>
+    <string name="data_payment_method">Efectivo</string>
+    <string name="mail">info@sportsclub.com</string>
+    <string name="phone">011-256-5261</string>
+    <string name="receipt_text1">recibi de</string>
+    <string name="receipt_text2">la suma de</string>
+    <string name="receipt_text3">en concepto de</string>
+    <string name="data_receipt_text1">Pedro López</string>
+    <string name="data_receipt_text2">200 ARS</string>
+    <string name="data_receipt_text3">Abono de Cuota Societaria</string>
+    <string name="receipt_text4">total</string>
+    <string name="data_receipt_text4">2000</string>
+    <string name="receipt_text5">pesos argentinos</string>
+
 
 </resources>

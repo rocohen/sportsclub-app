@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Clubdeportivo"
         tools:targetApi="31">
         <activity
+            android:name=".NonAssociatePaymentReceipt"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentReceipt"
+            android:exported="false" />
+        <activity
             android:name=".RegisterClientActivity"
             android:exported="false" />
         <activity

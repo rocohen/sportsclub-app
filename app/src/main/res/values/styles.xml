@@ -13,4 +13,9 @@
         <item name="colorPrimary">@color/medium_green</item>
         <item name="colorSurfaceVariant">@color/gray</item>
     </style>
+  
+    <style name="FABShape" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">28dp</item>
+
+    </style>
 </resources>

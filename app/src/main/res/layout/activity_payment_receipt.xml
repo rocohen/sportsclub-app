@@ -172,6 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mail"
+            android:textColor="@color/blue_info"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/poppins_regular"
@@ -297,6 +298,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:text="@string/receipt_text5"
+                android:textColor="@color/red_info"
                 android:paddingStart="5dp"
                 tools:ignore="RtlSymmetry">
             </TextView>

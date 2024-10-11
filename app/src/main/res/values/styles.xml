@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+<!--  Switch component styles-->
+    <style name="Theme.App" parent="Theme.Material3.Light">
+        <item name="materialSwitchStyle">@style/Widget.App.Switch</item>
+    </style>
 
+    <style name="Widget.App.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorPrimary">@color/medium_green</item>
+        <item name="colorSurfaceVariant">@color/gray</item>
+    </style>
+  
     <style name="FABShape" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerSize">28dp</item>
 
     </style>
-
 </resources>

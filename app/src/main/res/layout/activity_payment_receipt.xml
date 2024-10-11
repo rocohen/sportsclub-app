@@ -22,27 +22,30 @@
         <Button
             android:id="@+id/backButton"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="start"
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/app_back_button"
             app:icon="@drawable/ic_arrow_back"
+            app:iconSize="30dp"
             app:iconTint="@color/black"
 
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/homeButton"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="260dp"
             android:contentDescription="@string/app_home_button"
-            app:tint="@color/dark_green"
-            app:shapeAppearance="@style/FABShape"
-            app:backgroundTint="@color/white"
             android:src="@drawable/ic_home"
+            app:backgroundTint="@color/white"
             app:fabSize="normal"
-            android:layout_marginStart="260dp" />
+            app:maxImageSize="35dp"
+            app:shapeAppearance="@style/FABShape"
+            app:tint="@color/dark_green" />
 
     </LinearLayout>
 
@@ -309,13 +312,13 @@
 
     <Button
         android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
+        android:layout_width="124dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="@color/dark_blue"
         android:fontFamily="@font/mulish_semi_bold"
-        android:textAllCaps="true"
-        android:text="@string/btn_send" />
+        android:text="@string/btn_send"
+        android:textAllCaps="true" />
 
 </LinearLayout>
 

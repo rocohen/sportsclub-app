@@ -22,12 +22,13 @@
         <Button
             android:id="@+id/backButton"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_gravity="start"
             android:backgroundTint="@android:color/transparent"
             android:contentDescription="@string/app_back_button"
             app:icon="@drawable/ic_arrow_back"
+            app:iconSize="30dp"
             app:iconTint="@color/black"
 
             />
@@ -42,7 +43,9 @@
             app:backgroundTint="@color/white"
             android:src="@drawable/ic_home"
             app:fabSize="normal"
-            android:layout_marginStart="260dp" />
+            android:layout_marginStart="260dp"
+            app:maxImageSize="35dp"
+            />
 
     </LinearLayout>
 
@@ -308,7 +311,7 @@
 
     <Button
         android:id="@+id/sendButton"
-        android:layout_width="wrap_content"
+        android:layout_width="124dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="@color/dark_blue"

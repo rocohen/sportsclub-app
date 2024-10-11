@@ -34,6 +34,14 @@
     <string name="health_check_title">Tiene apto físico</string>
     <string name="required_notice">Todos los campos son obligatorios</string>
     <string name="register_btn">Registrar</string>
+    <!--Abonar Cuota Activity y Abonar Cuota Socio Activity-->
+    <string name="btnAbonarCuota">Abonar Cuota</string>
+    <string name="iBtnVolver">Boton Volver</string>
+    <string name="idCliente">Id Cliente</string>
+    <string name="btnConfirmar">CONFIRMAR</string>
+    <string name="montoCuotaSocio">$18000</string>
+    <string name="btnRegistrarPago">REGISTRAR PAGO</string>
+    <string name="btnGenerarCarnet">GENERAR CARNET</string>
 
     <!--  String array for client type dropdown component-->
     <string-array name="client_type">

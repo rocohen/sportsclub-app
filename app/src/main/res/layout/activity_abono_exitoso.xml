@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AbonoExitoso"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/txtAbonoExitoso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "@string/successful_payment"
+        android:textAllCaps="true"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:padding="16dp"
+        android:fontFamily="@font/poppins_bold"
+        android:singleLine="true" />
+
+    <ImageView
+        android:id="@+id/imgAbonoExitoso"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/successful_operation_img"
+        android:gravity="center"
+        android:textAlignment="center"
+        app:src="@drawable/party_popper"
+        app:srcCompat="@drawable/party_popper" />
+
+    <Button
+        android:id="@+id/btnGenerarComprobante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/generate_receipt"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        android:singleLine="true"
+        android:backgroundTint="@color/dark_green"
+        android:padding="15dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        />
+
+</LinearLayout>

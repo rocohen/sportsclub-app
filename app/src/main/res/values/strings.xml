@@ -116,4 +116,22 @@
         <item>Tarjeta 3 Cuotas (5% OFF del total sin interés)</item>
         <item>Tarjeta 6 Cuotas (10% OFF del total sin interés)</item>
     </string-array>
+  <!--  Club member ID card component-->
+ <string name="member_card">CARNET DE SOCIO</string>
+ <string name="associate_number">N° DE SOCIO: </string>
+ <string name="data_client_id">502</string>
+ <string name="year">año: </string>
+ <string name="data_year">2024</string>
+ <string name="associate_name">nombre: </string>
+ <string name="data_associate_name">Pedro</string>
+ <string name="associate_surname">apellido: </string>
+ <string name="data_associate_surname">López</string>
+  <!--  Successful payment activity -->
+ <string name="successful_payment">¡abono exitoso!</string>
+ <string name="generate_receipt">generar comprobante</string>
+  <!--  Successful payment activity -->
+ <string name="successful_registration">¡registro exitoso!</string>
+ <string name="payment_continue">continuar al abono</string>
+ <string name="successful_operation_img">Imagen de operación exitosa</string>
+
 </resources>

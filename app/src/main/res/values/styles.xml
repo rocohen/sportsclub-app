@@ -16,6 +16,5 @@
   
     <style name="FABShape" parent="ShapeAppearance.Material3.SmallComponent">
         <item name="cornerSize">28dp</item>
-
     </style>
 </resources>

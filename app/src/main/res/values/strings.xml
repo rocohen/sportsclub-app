@@ -50,7 +50,7 @@
         <item>No Socio</item>
     </string-array>
 
-   <!-- Payment Receipt -->
+    <!-- Payment Receipt -->
     <string name="comp_pago">comprobante de pago</string>
     <string name="app_back_button">Botón de volver atrás</string>
     <string name="app_home_button">Botón para regresar al menú</string>
@@ -84,5 +84,27 @@
     <string name="NA_data_receipt_text2">2000 ARS</string>
     <string name="NA_data_receipt_text3">Abono de actividad Yoga</string>
     <string name="NA_data_receipt_text4">2000</string>
+
+    <!-- Non Associate Payment Activity -->
+    <!--    Pay for sports activity section -->
+    <string name="pay_activity_title">Abonar actividad</string>
+    <!--    Sport activities card item-->
+    <string name="activity_name_title">Yoga</string>
+    <string name="activity_price_title">Precio:</string>
+    <string name="activity_price">$5000</string>
+    <string name="activity_id">505</string>
+    <string name="payment_method_hint">Forma de pago</string>
+    <string name="btn_title">Registrar pago</string>
+    <string name="previous_btn">Anterior</string>
+    <string name="next_btn">Siguiente</string>
+
+    <!--  String array for payment method dropdown component-->
+    <string-array name="payment_method_options">
+        <item>Efectivo</item>
+        <item>Tarjeta 1 Cuota</item>
+        <item>Tarjeta 3 Cuotas (5% OFF del total sin interés)</item>
+        <item>Tarjeta 6 Cuotas (10% OFF del total sin interés)</item>
+    </string-array>
+
 
 </resources>

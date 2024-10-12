@@ -22,14 +22,33 @@
             android:name="AbonoExitoso"
             android:exported="false" />
         <activity
+            android:name=".ListMembersActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".NonAssociatePaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NonAssociatePaymentReceipt"
+            android:exported="false" />
+        <activity
+            android:name=".PaymentReceipt"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterClientActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

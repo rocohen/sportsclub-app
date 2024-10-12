@@ -7,6 +7,7 @@
     <string name="login_user_hint">Usuario</string>
     <string name="login_pass_hint">Contraseña</string>
     <string name="login">ingresar</string>
+
     <!--Main Menu-->
     <string name="user_icon">icono de usuario</string>
     <string name="user_name_example">Fernando Ray</string>
@@ -34,7 +35,14 @@
     <string name="health_check_title">Tiene apto físico</string>
     <string name="required_notice">Todos los campos son obligatorios</string>
     <string name="register_btn">Registrar</string>
-
+    <!--Abonar Cuota Activity y Abonar Cuota Socio Activity-->
+    <string name="btnAbonarCuota">Abonar Cuota</string>
+    <string name="iBtnVolver">Boton Volver</string>
+    <string name="idCliente">Id Cliente</string>
+    <string name="btnConfirmar">CONFIRMAR</string>
+    <string name="montoCuotaSocio">$18000</string>
+    <string name="btnRegistrarPago">REGISTRAR PAGO</string>
+    <string name="btnGenerarCarnet">GENERAR CARNET</string>
     <!--  String array for client type dropdown component-->
     <string-array name="client_type">
         <item>Socio</item>
@@ -56,4 +64,56 @@
     <string name="payment_amount">Abonó: 18000</string>
     <string name="last_payment_date">F.Últ.Pago: 05/06/2024</string>
     <string name="payment_due_date">F.Vencimiento: 05/07/2024</string>
+    <!-- Payment Receipt -->
+    <string name="comp_pago">comprobante de pago</string>
+    <string name="app_back_button">Botón de volver atrás</string>
+    <string name="app_home_button">Botón para regresar al menú</string>
+    <string name="client_id">ID Cliente</string>
+    <string name="receipt_date">Fecha</string>
+    <string name="expiration_date">Fecha de Vencimiento</string>
+    <string name="payment_method">Forma de Pago</string>
+    <string name="data_client_id">001</string>
+    <string name="data_receipt_date">01-10-24</string>
+    <string name="data_expiration_date">01-11-24</string>
+    <string name="data_payment_method">Efectivo</string>
+    <string name="mail">info@sportsclub.com</string>
+    <string name="phone">011-256-5261</string>
+    <string name="receipt_text1">recibi de</string>
+    <string name="receipt_text2">la suma de</string>
+    <string name="receipt_text3">en concepto de</string>
+    <string name="data_receipt_text1">Pedro López</string>
+    <string name="data_receipt_text2">200 ARS</string>
+    <string name="data_receipt_text3">Abono de Cuota Societaria</string>
+    <string name="receipt_text4">total</string>
+    <string name="data_receipt_text4">2000</string>
+    <string name="receipt_text5">pesos argentinos</string>
+    <string name="btn_send">enviar</string>
+    <!-- Non Associate Payment Receipt -->
+    <string name="NA_data_client_id">503</string>
+    <string name="NA_data_receipt_date">21-06-24</string>
+    <string name="NA_data_expiration_date">21-06-24</string>
+    <string name="NA_data_payment_method">Efectivo</string>
+    <string name="NA_data_receipt_text1">Juan Pérez</string>
+    <string name="NA_data_receipt_text2">2000 ARS</string>
+    <string name="NA_data_receipt_text3">Abono de actividad Yoga</string>
+    <string name="NA_data_receipt_text4">2000</string>
+    <!-- Non Associate Payment Activity -->
+    <!--    Pay for sports activity section -->
+    <string name="pay_activity_title">Abonar actividad</string>
+    <!--    Sport activities card item-->
+    <string name="activity_name_title">Yoga</string>
+    <string name="activity_price_title">Precio:</string>
+    <string name="activity_price">$5000</string>
+    <string name="activity_id">505</string>
+    <string name="payment_method_hint">Forma de pago</string>
+    <string name="btn_title">Registrar pago</string>
+    <string name="previous_btn">Anterior</string>
+    <string name="next_btn">Siguiente</string>
+    <!--  String array for payment method dropdown component-->
+    <string-array name="payment_method_options">
+        <item>Efectivo</item>
+        <item>Tarjeta 1 Cuota</item>
+        <item>Tarjeta 3 Cuotas (5% OFF del total sin interés)</item>
+        <item>Tarjeta 6 Cuotas (10% OFF del total sin interés)</item>
+    </string-array>
 </resources>

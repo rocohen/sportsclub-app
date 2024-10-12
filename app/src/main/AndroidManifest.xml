@@ -19,7 +19,7 @@
             android:name=".RegistroCliente2"
             android:exported="false" />
         <activity
-            android:name=".AbonoExitoso"
+            android:name="AbonoExitoso"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -8,50 +8,51 @@
     tools:context=".CarnetSocio"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#B6B5B5">
+    android:background="@color/medium_gray">
 
     <LinearLayout
+        android:id="@+id/navigationButtons"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/iconoarrow"
-            android:elevation="10dp"
-            android:background="@drawable/icon"
+        <Button
+            android:id="@+id/backButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="start"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/app_back_button"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconSize="30dp"
+            app:iconTint="@color/black"
+
             />
 
-        <Space
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/homeButton"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="260dp"
+            android:contentDescription="@string/app_home_button"
+            android:src="@drawable/ic_home"
+            app:backgroundTint="@color/white"
+            app:fabSize="normal"
+            app:maxImageSize="35dp"
+            app:shapeAppearance="@style/FABShape"
+            app:tint="@color/dark_green" />
 
-        <ImageButton
-            android:id="@+id/btnHome"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/iconohome"
-            android:background="@drawable/icon"
-            android:elevation="10dp"
-            />
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="93dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        />
+        tools:ignore="InefficientWeight" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,11 +68,11 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:text="CARNET DE SOCIO"
+            android:text="@string/member_card"
             android:textSize="32sp"
-            android:fontFamily="sans-serif-black"
+            android:fontFamily="@font/poppins_bold"
             android:textAlignment="center"
             />
 
@@ -85,54 +86,133 @@
                 android:id="@+id/imgLogo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/logoclubdeportivo" />
+                app:srcCompat="@drawable/club_logo"
+                android:contentDescription="@string/club_logo"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_margin="5dp"
-                android:gravity="center">
                 >
-                <TextView
-                    android:id="@+id/txtNumSoc"
-                    android:layout_width="match_parent"
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="N° DE SOCIO: NUMERO"
-                    android:fontFamily="sans-serif-medium"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="10dp"/>
-                <TextView
-                    android:id="@+id/txtAnioSoc"
-                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="5dp"
+                    >
+                    <TextView
+                            android:id="@+id/txtNumSoc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="@string/associate_number"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/dataNumSoc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="@font/poppins_bold"
+                            android:text="@string/data_client_id"
+                            android:layout_marginStart="5dp"
+                            android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="AÑO: 2024"
-                    android:fontFamily="sans-serif-medium"
-                    android:textSize="16sp"/>
+                    android:orientation="horizontal"
+                    android:layout_margin="5dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/txtAnioSoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/year"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/dataAnioSoc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:text="@string/data_year"
+                        android:fontFamily="@font/poppins_bold"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtNombreSocio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NOMBRE: INGRESAR NOMBRE"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif-medium"
-            />
-        <TextView
-            android:id="@+id/txtApellidoSocio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="APELLIDO: INGRESAR APELLIDO"
-            android:textSize="16sp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="sans-serif-medium"
-            />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/txtNombreSocio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/associate_name"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    />
+                <TextView
+                    android:id="@+id/dataNombreSocio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/data_associate_name"
+                    android:layout_marginStart="5dp"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    />
+
+            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="10dp">
+
+                    <TextView
+                        android:id="@+id/txtApellidoSocio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/associate_surname"
+                        android:textAllCaps="true"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/poppins_bold"
+                        />
+                    <TextView
+                        android:id="@+id/dataApellidoSocio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/data_associate_surname"
+                        android:layout_marginStart="5dp"
+                        android:textAllCaps="true"
+                        android:textSize="16sp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/poppins_bold"
+                        />
+                </LinearLayout>
+
     </LinearLayout>
 
     <Space
@@ -143,18 +223,15 @@
         />
 
     <Button
-        android:id="@+id/btnEnviarDescar"
-        android:layout_width="wrap_content"
+        android:id="@+id/sendButton"
+        android:layout_width="124dp"
         android:layout_height="wrap_content"
-        android:text="ENVIAR / DESCARGAR"
-        android:textSize="20sp"
-        android:backgroundTint="#22BEB0"
-        android:padding="15dp"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp"
-        android:textAlignment="center"
         android:layout_gravity="center"
-        android:fontFamily="sans-serif-medium"
+        android:backgroundTint="@color/dark_blue"
+        android:fontFamily="@font/mulish_semi_bold"
+        android:text="@string/btn_send"
+        android:textAllCaps="true"
+
         />
 
     <Space

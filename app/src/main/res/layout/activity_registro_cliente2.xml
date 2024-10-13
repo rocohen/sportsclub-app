@@ -34,8 +34,8 @@
         android:contentDescription="@string/successful_operation_img"
         android:gravity="center"
         android:textAlignment="center"
-        app:src="@drawable/party_popper"
-        app:srcCompat="@drawable/party_popper" />
+        android:src="@drawable/party_popper"
+         />
 
     <Button
         android:id="@+id/btnRegistroExitosoContinuarAbono"

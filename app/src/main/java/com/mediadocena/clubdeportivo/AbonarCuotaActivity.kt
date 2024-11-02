@@ -15,7 +15,7 @@ class AbonarCuotaActivity : AppCompatActivity() {
 
         val iBtnVolver = findViewById<ImageButton>(R.id.iBtnVolver)
         iBtnVolver.setOnClickListener{
-            val intentVolver = Intent(this, MainActivity::class.java)
+            val intentVolver = Intent(this, MenuActivity::class.java)
             startActivity(intentVolver)
         }
 

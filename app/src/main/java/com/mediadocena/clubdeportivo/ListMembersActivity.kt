@@ -1,7 +1,9 @@
 package com.mediadocena.clubdeportivo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ExpandableListView
+import android.widget.ImageButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -22,6 +24,7 @@ class ListMembersActivity : AppCompatActivity() {
     private lateinit var listAdapter: CustomExpandableListAdapter
     private lateinit var listDataHeader: List<String>
     private lateinit var listDataChild: HashMap<String, List<String>>
+    private lateinit var btnBack: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class ListMembersActivity : AppCompatActivity() {
     private fun initComponents(){
         dateEditText = findViewById(R.id.dateEditText)
         expandableListView = findViewById(R.id.expandableListView)
+        btnBack = findViewById(R.id.BtnBack)
     }
 
     private fun initListeners(){
@@ -55,6 +59,7 @@ class ListMembersActivity : AppCompatActivity() {
                 dateEditText.setText(selectedDate)
             }
         }
+        btnBack.setOnClickListener { returnToMenu() }
     }
 
     private fun configCurrentDate(){
@@ -123,5 +128,11 @@ class ListMembersActivity : AppCompatActivity() {
             "Santiago Nuñez" to santiagoDetails,
             "Alejandra Dominguez" to alejandraDetails
         )
+    }
+
+    private fun returnToMenu() {
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish() // To close current activity
     }
 }

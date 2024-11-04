@@ -6,11 +6,16 @@ import com.google.android.material.snackbar.Snackbar
 
 class SnackbarUtils {
     companion object {
-        fun showCustomSnackbar(activity: Activity, message: String, type: String): Snackbar {
+        fun showCustomSnackbar(
+            activity: Activity,
+            message: String,
+            type: String,
+            duration: Int = Snackbar.LENGTH_LONG
+        ): Snackbar {
             val snackbar = Snackbar.make(
                 activity.findViewById(android.R.id.content),
                 message,
-                Snackbar.LENGTH_LONG
+                duration
             )
             val snackbarView = snackbar.view
             val snackbarText =

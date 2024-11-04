@@ -8,6 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import com.mediadocena.clubdeportivo.database.ClubDatabaseHelper
+import com.mediadocena.clubdeportivo.dataclasses.MemberDetails
+import com.mediadocena.clubdeportivo.utils.SnackbarUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -22,23 +25,24 @@ class ListMembersActivity : AppCompatActivity() {
     // Variables to list club members
     private lateinit var expandableListView: ExpandableListView
     private lateinit var listAdapter: CustomExpandableListAdapter
-    private lateinit var listDataHeader: List<String>
-    private lateinit var listDataChild: HashMap<String, List<String>>
+    private var listDataHeader: List<String> = listOf()
+    private var listDataChild: HashMap<String, List<String>> = hashMapOf()
     private lateinit var btnBack: ImageButton
+    private var membersListFees: List<MemberDetails> = listOf()
+    private lateinit var dbHelper: ClubDatabaseHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_list_members)
+        dbHelper = ClubDatabaseHelper(this)
         // Initialize all components
         initComponents()
         // This is to config the current date in the EditText
         configCurrentDate()
         // Initialize all listeners
         initListeners()
-
-        // Prepare data to list
-        prepareListData()
 
         // Create adapter to show list in activity layout
         listAdapter = CustomExpandableListAdapter(this, listDataHeader, listDataChild)
@@ -57,6 +61,27 @@ class ListMembersActivity : AppCompatActivity() {
         dateEditText.setOnClickListener {
             showDatePicker { selectedDate ->
                 dateEditText.setText(selectedDate)
+
+                val formattedDate = formatInputDate(dateEditText.text.toString())
+                // Bring club members list data
+                membersListFees = dbHelper.listarSociosCuotasAVenc(formattedDate)
+
+                if(membersListFees.isNotEmpty()) {
+                    prepareListData(membersListFees)
+                    // Reinitialized adapter with new list data
+                    listAdapter = CustomExpandableListAdapter(this, listDataHeader, listDataChild)
+                    expandableListView.setAdapter(listAdapter)
+                } else {
+                    // First we clean the adapter
+                    listDataHeader = listOf()
+                    listDataChild = hashMapOf()
+                    listAdapter = CustomExpandableListAdapter(this, listDataHeader, listDataChild)
+                    expandableListView.setAdapter(listAdapter)
+                    SnackbarUtils
+                        .showCustomSnackbar(this, "No existen registros para la fecha indicada", "warning")
+                        .show()
+                }
+                listAdapter.notifyDataSetChanged()
             }
         }
         btnBack.setOnClickListener { returnToMenu() }
@@ -93,46 +118,41 @@ class ListMembersActivity : AppCompatActivity() {
     }
 
     // Functions to list club members
-    private fun prepareListData() {
-        listDataHeader = listOf("Hernán Navarro", "Santiago Nuñez", "Alejandra Dominguez")
+    private fun prepareListData(memblist: List<MemberDetails>) {
+        listDataHeader = memblist.map { it.nombreCompleto }
+        listDataChild = hashMapOf()
 
-        val hernanDetails = listOf(
-            "Id: 500",
-            "Teléfono: 9512145487",
-            "Correo: hernannavarro@example@gmail.com",
-            "Abonó: 18000",
-            "F.Últ.Pago: 05/06/2024",
-            "F.Vencimiento: 05/07/2024"
-        )
-
-        val santiagoDetails = listOf(
-            "Id: 501",
-            "Teléfono: 9512145488",
-            "Correo: santiagonn@example@gmail.com",
-            "Abonó: 20000",
-            "F.Últ.Pago: 05/06/2024",
-            "F.Vencimiento: 05/07/2024"
-        )
-
-        val alejandraDetails = listOf(
-            "Id: 502",
-            "Teléfono: 1162145488",
-            "Correo: aledominguez@example@gmail.com",
-            "Abonó: 18000",
-            "F.Últ.Pago: 05/06/2024",
-            "F.Vencimiento: 05/07/2024"
-        )
-
-        listDataChild = hashMapOf(
-            "Hernán Navarro" to hernanDetails,
-            "Santiago Nuñez" to santiagoDetails,
-            "Alejandra Dominguez" to alejandraDetails
-        )
+        for (member in memblist) {
+            val memberDetails = listOf(
+                "Id: ${member.id}",
+                "Teléfono: ${member.telefono}",
+                "Correo: ${member.correo}",
+                "Abonó: ${member.montoAbono}",
+                "F.Últ.Pago: ${member.fecUltPago}",
+                "F.Vencimiento: ${member.fecVencPago}"
+            )
+            listDataChild[member.nombreCompleto] = memberDetails
+        }
     }
 
     private fun returnToMenu() {
         val intent = Intent(this, MenuActivity::class.java)
         startActivity(intent)
         finish() // To close current activity
+    }
+
+    private fun formatInputDate(fecha:String):String {
+        val originalFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return try {
+            val date = originalFormat.parse(fecha)
+            if (date != null) {
+                targetFormat.format(date) // Format date to new format
+            } else {
+                throw IllegalArgumentException("Fecha inválida: $fecha")
+            }
+        } catch (e: Exception) {
+            throw IllegalArgumentException("Error al parsear la fecha: ${e.message}")
+        }
     }
 }

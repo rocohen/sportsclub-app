@@ -18,6 +18,7 @@ class RegisterClientActivity : AppCompatActivity() {
     private lateinit var txtName: TextInputLayout
     private lateinit var txtSurname: TextInputLayout
     private lateinit var txtEmail: TextInputLayout
+    private lateinit var txtPhone: TextInputLayout
     private lateinit var clientType: AutoCompleteTextView
     private lateinit var txtDNI: TextInputLayout
     private lateinit var healthCheck: MaterialSwitch
@@ -42,6 +43,7 @@ class RegisterClientActivity : AppCompatActivity() {
         txtEmail = findViewById(R.id.txtEmail)
         clientType = findViewById(R.id.autoCompTvClientType)
         txtDNI = findViewById(R.id.txtDNI)
+        txtPhone = findViewById(R.id.txtPhone)
         healthCheck = findViewById(R.id.healthCheck)
         btnRegisterClient = findViewById(R.id.btnRegisterClient)
     }
@@ -64,9 +66,10 @@ class RegisterClientActivity : AppCompatActivity() {
         val isSurnameValid = txtSurname.editText?.text?.isNotEmpty() == true
         val isEmailValid = txtEmail.editText?.text?.isNotEmpty() == true
         val isDNIValid = txtDNI.editText?.text?.isNotEmpty() == true
+        val isPhoneValid = txtPhone.editText?.text?.isNotEmpty() == true
         val isClientTypeValid = clientTypes.contains(clientType.text.toString())
 
-        return isNameValid && isSurnameValid && isEmailValid && isDNIValid && isClientTypeValid
+        return isNameValid && isSurnameValid && isEmailValid && isDNIValid && isClientTypeValid && isPhoneValid
     }
 
     private fun registerClient() {
@@ -76,21 +79,31 @@ class RegisterClientActivity : AppCompatActivity() {
             val surname = txtSurname.editText?.text.toString()
             val dni = txtDNI.editText?.text.toString()
             val mail = txtEmail.editText?.text.toString()
+            val phone = txtPhone.editText?.text.toString()
             val clientTypeText = clientType.text.toString()
             val healthCheckStatus = if (healthCheck.isChecked) 1 else 0
 
-            dbHelper.registrarCliente(
+            val resultado = dbHelper.registrarCliente(
                     nombreC = name,
                     apellidoC = surname,
                     dniC = dni,
+                    telC = phone,
                     correoC = mail,
                     tipoC = clientTypeText,
-                    aptoFisico = healthCheckStatus)
+                    aptoFisico = healthCheckStatus
+            )
 
+            if (resultado == -1L){
+                Toast.makeText(this, "No se pudo realizar el registro", Toast.LENGTH_SHORT).show()
 
-            Toast.makeText(this, "Cliente registrado exitosamente con ID  ", Toast.LENGTH_SHORT).show()
-            clearFields()
-            returnToPrevView()
+            }else if (resultado == -2L){
+                Toast.makeText(this, "El cliente ya está registrado", Toast.LENGTH_SHORT).show()
+
+            }else{
+                Toast.makeText(this, "Cliente registrado exitosamente con ID $resultado ", Toast.LENGTH_SHORT).show()
+                clearFields()
+                returnToPrevView()
+            }
 
         } else {
             Toast.makeText(this, "Los campos no pueden estar vacíos", Toast.LENGTH_SHORT).show()

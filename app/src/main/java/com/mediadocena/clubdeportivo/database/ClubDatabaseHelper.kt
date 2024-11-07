@@ -254,24 +254,39 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         nombreC: String,
         apellidoC: String,
         dniC: String,
+        telC: String,
         correoC: String,
         tipoC: String,
         aptoFisico: Int
     ): Long {
         val db = this.writableDatabase
+
+        // Primero verificamos por el DNI si el cliente ya existe en la base de datos
+        val cursor = db.rawQuery("SELECT 1 FROM clientes WHERE DNIC = ?", arrayOf(dniC))
+        val existe = cursor.moveToFirst()
+        cursor.close()
+
+        if (existe) {
+            db.close()
+            return -2
+        }
+
+        // Si el DNI no existe, procedemos a registrar al nuevo cliente
         val valores = ContentValues().apply {
             put("nombreC", nombreC)
             put("apellidoC", apellidoC)
             put("DNIC", dniC)
+            put("telC", telC)
             put("correoC", correoC)
             put("tipoC", tipoC)
             put("aptoFisico", aptoFisico)
+            put("estadoC", 1)
         }
 
-        // Hacemos el insert en la tabla "clientes"
-        val success =
-            db.insert("clientes", null, valores).also { db.close()}
-        return success
+        val result = db.insert("clientes", null, valores)
+        db.close()
+
+        return if (result == -1L) -1 else result
 
     }
 

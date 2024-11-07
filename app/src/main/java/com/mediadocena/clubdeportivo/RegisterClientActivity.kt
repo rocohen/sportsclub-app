@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.mediadocena.clubdeportivo.database.ClubDatabaseHelper
+import com.mediadocena.clubdeportivo.utils.SnackbarUtils
 
 
 class RegisterClientActivity : AppCompatActivity() {
@@ -100,9 +102,15 @@ class RegisterClientActivity : AppCompatActivity() {
                 Toast.makeText(this, "El cliente ya está registrado", Toast.LENGTH_SHORT).show()
 
             }else{
-                Toast.makeText(this, "Cliente registrado exitosamente con ID $resultado ", Toast.LENGTH_SHORT).show()
-                clearFields()
-                returnToPrevView()
+                SnackbarUtils
+                    .showCustomSnackbar(this, "Cliente registrado exitosamente con ID $resultado ", "success", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Abonar"){
+                        val intent = Intent(this, AbonarCuotaActivity::class.java)
+                        intent.putExtra("idCliente", resultado)
+                        startActivity(intent)
+                        //sino eliminar setAction y llamar a la funcion returnToPrevView()
+                    }
+                    .show()
             }
 
         } else {

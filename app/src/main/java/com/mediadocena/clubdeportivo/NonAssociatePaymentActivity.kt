@@ -1,14 +1,25 @@
 package com.mediadocena.clubdeportivo
 
+import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
 import com.mediadocena.clubdeportivo.com.mediadocena.clubdeportivo.Paginator
+import com.mediadocena.clubdeportivo.database.ClubDatabaseHelper
+import com.mediadocena.clubdeportivo.entities.Cuota
+import java.time.LocalDate
 
 class NonAssociatePaymentActivity : AppCompatActivity() {
     private lateinit var card: MaterialCardView
@@ -19,8 +30,14 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
     private lateinit var btnNext: Button
     private lateinit var btnPrevious: Button
     private lateinit var paginator: Paginator<ActivityModel> // Paginator instance
-    private val activities = mutableListOf<ActivityModel>() //  Sport activities data model
+    private var activities = mutableListOf<ActivityModel>() //  Sport activities data model
 
+    // Para almacenar los datos de la cardview seleccionada
+    private var nomAct: String = ""
+    private var priceAct: Double = 00.0
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -28,13 +45,12 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         //Initialize all components
         initComponents()
 
-        // Examples to add cards dynamically from database
-        activities.add(ActivityModel("Yoga", "101", "$5000"))
-        activities.add(ActivityModel("Pilates", "102", "$7500"))
-        activities.add(ActivityModel("Spinning", "103", "$6000"))
-        activities.add(ActivityModel("Zumba", "104", "$6700"))
-        activities.add(ActivityModel("Natación", "105", "$6200"))
-        activities.add(ActivityModel("Ciclismo", "106", "$5500"))
+        // Se obtiene la lista de actividades de la BD
+        val datos = ClubDatabaseHelper(this)
+        var lista = datos.ObtenerActividadesDisp()
+
+        // Asignamos la lista de actividades a Activities
+        activities = lista
 
         // Initialize the pagination with the list of sport activities and page size
         paginator = Paginator(activities, 4)
@@ -45,7 +61,98 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         //Initialize all listeners
         initListeners()
 
+
+        // LOGICA BOTON VOLVER
+        val imgBtnBack = findViewById<ImageButton>(R.id.imgBtnBack)
+        imgBtnBack.setOnClickListener{
+            val intentAtras = Intent(this,AbonarCuotaActivity::class.java)
+            startActivity(intentAtras)
+        }
+
+        // LOGICA CAPTURA DE ID ENVIADO EN EL INTENT
+        val idClienteVar = intent.getStringExtra("ID_CLIENTE")?.toIntOrNull()
+        var idCliente = 0
+        if (idClienteVar != null) { idCliente = idClienteVar }
+
+        val cboFormaPago = findViewById<AutoCompleteTextView>(R.id.acTvPaymentMethod)
+        val errorAbonoNoSocio = findViewById<LinearLayoutCompat>(R.id.errorAbonoNoSocio)
+
+        // LOGICA BOTON REGISTRAR PAGO
+        val botonRegistrarPago = findViewById<Button>(R.id.btnRegistrarPagoNoSocio)
+        botonRegistrarPago.setOnClickListener{
+            val nombre = nomAct
+            val price = priceAct
+            if (nombre != "" && price != 00.0) {
+                val cuota: Cuota // INSTANCIA CLASE CUOTA
+                var cantidadCuotas = 0 // Se asigna al valuar la forma de pago
+
+                // Variables para instanciar un objeto CUOTA
+                val fechaPago: LocalDate = LocalDate.now()
+                var monto: Double = priceAct
+                val formaPago: String = cboFormaPago.text.toString()
+                val fechaVence: LocalDate = LocalDate.now()
+                var tienePromo: Boolean = false
+                val detallePago: String = "Abono de actividad ${nomAct}"
+
+                if (formaPago == "Forma de pago") {
+                    Snackbar.make(errorAbonoNoSocio,"Error: Debe seleccionar una forma de pago valida.", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(Color.RED)
+                        .setTextColor(Color.WHITE)
+                        .show()
+                }
+                else {
+                    when (formaPago) {
+                        "Tarjeta 3 Cuotas (5% OFF, sin interes)" -> {
+                            tienePromo = true
+                            cantidadCuotas = 3
+                        }
+                        "Tarjeta 6 Cuotas (10% OFF, sin interes)" -> {
+                            tienePromo = true
+                            cantidadCuotas = 6
+                        }
+                    }
+                    cuota = Cuota(
+                        idCliente,
+                        fechaPago,
+                        monto,
+                        formaPago,
+                        fechaVence,
+                        tienePromo,
+                        detallePago
+                    )
+                    cuota.aplicarPromocion(cantidadCuotas) // Luego de instanciar aplicamos la promocion
+                    val resultado = datos.registrarPago(
+                        cuota.idCliente,
+                        cuota.fecha.toString(),
+                        cuota.monto,
+                        cuota.formaPago,
+                        cuota.fechaVencimiento.toString(),
+                        cuota.tienePromo,
+                        cuota.detalle
+                    )
+                    if (resultado != -1L) {
+                        val intent = Intent(this, AbonoExitoso::class.java)
+                        intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
+                        startActivity(intent)
+                    }
+                    else {
+                        Snackbar.make(errorAbonoNoSocio,"Error: No se pudo registrar el pago " +
+                                "correctamente.", Snackbar.LENGTH_SHORT)
+                            .setBackgroundTint(Color.RED)
+                            .setTextColor(Color.WHITE)
+                            .show()
+                    }
+                }
+            }
+            else {
+                Snackbar.make(errorAbonoNoSocio, "ERROR: Por favor, seleccione una actividad para continuar.", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.RED)
+                    .setTextColor(Color.WHITE)
+                    .show()
+            }
+        }
     }
+
 
     private fun initComponents() {
         card = findViewById(R.id.cardActivity01)
@@ -60,6 +167,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         setPaginationListeners()
     }
 
+
     private fun setListListeners() {
         for (i in 0 until parentLayout.childCount) {
             val child = parentLayout.getChildAt(i)
@@ -68,13 +176,16 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
                     // Uncheck all cards first
                     uncheckAllCards()
                     // 'view' is the MaterialCardView clicked
-                    view as MaterialCardView
+                    val cardView = view as MaterialCardView
                     view.isChecked = !view.isChecked
+                    nomAct = cardView.findViewById<TextView>(R.id.activity_name).text.toString()
+                    priceAct = cardView.findViewById<TextView>(R.id.activity_price).text.toString().toDouble()
                     true
                 }
             }
         }
     }
+
 
     private fun uncheckAllCards(){
         // Filters all MaterialCardView components in a list
@@ -86,6 +197,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
             cardView.isChecked = false  // Removes all checked MaterialCardView components
         }
     }
+
 
     // Function to show activities of a specific page
     private fun showPage() {
@@ -106,6 +218,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         setListListeners()
     }
 
+
     private fun setPaginationListeners(){
         btnNext.setOnClickListener {
             if (paginator.goToNextPage()) {
@@ -119,6 +232,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun addActivityCard(activity: ActivityModel) {
         // Inflating the card layout from the XML

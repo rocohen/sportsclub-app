@@ -113,8 +113,16 @@
     <string-array name="payment_method_options">
         <item>Efectivo</item>
         <item>Tarjeta 1 Cuota</item>
-        <item>Tarjeta 3 Cuotas (5% OFF del total sin interés)</item>
-        <item>Tarjeta 6 Cuotas (10% OFF del total sin interés)</item>
+        <item>Tarjeta 3 Cuotas (5% OFF, sin interes)</item>
+        <item>Tarjeta 6 Cuotas (10% OFF, sin interes)</item>
+    </string-array>
+    <!--  String array for spinner component-->
+    <string-array name="combo_opciones_pago">
+        <item> Forma de Pago </item>
+        <item> Efectivo </item>
+        <item> Tarjeta 1 Cuota </item>
+        <item> Tarjeta 3 Cuotas (5% OFF, sin interes) </item>
+        <item> Tarjeta 6 Cuotas (10% OFF, sin interes) </item>
     </string-array>
   <!--  Club member ID card component-->
  <string name="member_card">CARNET DE SOCIO</string>

@@ -1,10 +1,15 @@
 package com.mediadocena.clubdeportivo.database
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import com.mediadocena.clubdeportivo.ActivityModel
 import com.mediadocena.clubdeportivo.dataclasses.Usuario
+import com.mediadocena.clubdeportivo.entities.Cliente
+import java.time.LocalDate
 
 class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null,DATABASE_VERSION) {
     companion object{
@@ -49,7 +54,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 fechaVence TEXT,
                 tienePromo INTEGER DEFAULT 0,
                 detalle TEXT,
-                FOREIGN KEY(idCliente) REFERENCES clienteS(idCliente)
+                FOREIGN KEY(idCliente) REFERENCES clientes(idCliente)
             );
         """
         private const val CREATE_TABLE_ACTIVITIES = """
@@ -67,7 +72,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
                 idClientactiv INTEGER PRIMARY KEY AUTOINCREMENT,
                 idCliente INTEGER NOT NULL,
                 idActividad INTEGER NOT NULL,
-                FOREIGN KEY(idCliente) REFERENCES clienteS(idCliente),
+                FOREIGN KEY(idCliente) REFERENCES clientes(idCliente),
                 FOREIGN KEY(idActividad) REFERENCES actividades(idActividad)
             );
         """
@@ -177,7 +182,8 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             (20, 453, 20), (21, 453, 21), (22, 485, 29), (23, 457, 32), (24, 493, 34);
         """)
 
-        db?.execSQL("""
+        val execSQL = db?.execSQL(
+            """
             INSERT INTO cuotas VALUES
             (200,453,'2024-11-05',2000,'Efectivo','2024-11-05',0, 'Abonó actividad Yoga'),
             (201,453,'2024-11-05',1500,'Efectivo','2024-11-05',0,'Abonó actividad Pilates'),
@@ -213,7 +219,8 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             (231,497,DATE('now', '-30 days'),18000, 'Efectivo',DATE('now'),0, NULL),
             (232,498,DATE('now', '-30 days'),18000, 'Efectivo',DATE('now'),0, NULL),
             (233,500,'2024-11-05',18000, 'Efectivo','2024-12-05',0, NULL);
-        """)
+        """
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -275,7 +282,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     }
 
 
-    // Método para insertar el registro de pago en la tabla cuotas
+    // Método para insertar el registro de pago en la tabla cuotas (SOCIO)
     fun registrarPago(
         idCliente: Int,
         fecha: String,
@@ -283,7 +290,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         formaPago: String,
         fechaVence: String,
         tienePromo: Boolean,
-        detalle: String?
+        detalle: String
     ): Long {
         val db = this.writableDatabase
         val valores = ContentValues().apply {
@@ -295,8 +302,101 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             put("tienePromo", if (tienePromo) 1 else 0)
             put("detalle", detalle)
         }
-
         // Insertamos los valores en la tabla "cuotas"
         return db.insert("cuotas", null, valores).also { db.close() }
+    }
+
+
+    //Metodo para devolver tipo de cliente
+    fun ObtenerTipoCliente(id: String) :  String {
+        val db = this.readableDatabase
+        val query = """
+            SELECT tipoC
+            FROM clientes
+            WHERE idCliente = ?
+        """
+        val selectionArgs = arrayOf(id)
+        val cursor = db.rawQuery(query, selectionArgs)
+        var resultado = "0"
+
+        try {
+            if (cursor.moveToFirst()) {
+                resultado = cursor.getString(cursor.getColumnIndexOrThrow("tipoC"))
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al obtener el tipo de cliente: ${e.message}")
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return resultado
+    }
+
+
+    // Metodo para devolver ultimo vencimiento de cuota del SOCIO
+    fun ObtenerUltimoVencimientoSocio (id: String) : String {
+        val db = this.readableDatabase
+        val query = """
+            SELECT fechaVence
+            FROM cuotas
+            WHERE idCliente = ?
+            ORDER BY fechaVence DESC
+            LIMIT 1
+        """
+        val selectionArgs = arrayOf(id)
+        val cursor = db.rawQuery(query, selectionArgs)
+        var resultado = "0"
+        try {
+            if (cursor.moveToFirst()) {
+                resultado = cursor.getString(cursor.getColumnIndexOrThrow("fechaVence"))
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al obtener el ultimo registro de vencimiento del cliente: ${e.message}")
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return resultado
+    }
+
+
+    // Metodo para obtener actividades con cupo disponible
+    fun ObtenerActividadesDisp (): MutableList<ActivityModel> {
+
+        val db = this.readableDatabase
+        val query = "SELECT nombreA, idActividad, precio " +
+                    "FROM actividades " +
+                    "WHERE estadoA = 1 AND cupoDisp < cupoMax"
+        val cursor = db.rawQuery(query,null)
+
+        val listaActividades = mutableListOf<ActivityModel>()
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    val nombreAct = cursor.getString(cursor.getColumnIndexOrThrow("nombreA"))
+                    val idAct = cursor.getInt(cursor.getColumnIndexOrThrow("idActividad")).toString()
+                    val precioAct = cursor.getDouble(cursor.getColumnIndexOrThrow("precio")).toString()
+                    
+                    val actividad = ActivityModel(nombreAct, idAct, precioAct)
+                    listaActividades.add(actividad)
+                } while (cursor.moveToNext())
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al obtener lista de actividades: ${e.message}") 
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return listaActividades
     }
 }

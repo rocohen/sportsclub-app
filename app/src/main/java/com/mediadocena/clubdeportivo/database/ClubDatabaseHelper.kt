@@ -223,7 +223,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.execSQL("DROP TABLE IF EXISTS cuotas");
         db?.execSQL("DROP TABLE IF EXISTS actividades");
         db?.execSQL("DROP TABLE IF EXISTS clienactiv");
-        onCreate(db);
+        onCreate(db)
     }
 
 
@@ -254,28 +254,31 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         nombreC: String,
         apellidoC: String,
         dniC: String,
-        telC: String,
         correoC: String,
         tipoC: String,
-        aptoFisico: Boolean
+        aptoFisico: Int
     ): Long {
         val db = this.writableDatabase
         val valores = ContentValues().apply {
             put("nombreC", nombreC)
             put("apellidoC", apellidoC)
             put("DNIC", dniC)
-            put("telC", telC)
             put("correoC", correoC)
+            put("tipoC", tipoC)
             put("aptoFisico", aptoFisico)
-            put("estado", 1)
         }
 
         // Hacemos el insert en la tabla "clientes"
-        return db.insert("clientes", null, valores).also { db.close() }
+        val success =
+            db.insert("clientes", null, valores).also { db.close()}
+        return success
+
     }
 
+}
 
     // Método para insertar el registro de pago en la tabla cuotas
+/*
     fun registrarPago(
         idCliente: Int,
         fecha: String,
@@ -298,5 +301,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         // Insertamos los valores en la tabla "cuotas"
         return db.insert("cuotas", null, valores).also { db.close() }
+
+
     }
-}
+*/

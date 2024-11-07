@@ -5,12 +5,13 @@ import android.os.Bundle
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputLayout
 import com.mediadocena.clubdeportivo.database.ClubDatabaseHelper
-import com.mediadocena.clubdeportivo.utils.SnackbarUtils
+
 
 class RegisterClientActivity : AppCompatActivity() {
     private lateinit var iBtnBack: ImageButton
@@ -58,7 +59,7 @@ class RegisterClientActivity : AppCompatActivity() {
     }
 
     private fun areFieldsValid(): Boolean {
-        // Verificamos que los TextInputLayout y el AutoCompleteTextView no estén vacíos
+        /* Verificamos que los TextInputLayout y el AutoCompleteTextView no estén vacíos*/
         val isNameValid = txtName.editText?.text?.isNotEmpty() == true
         val isSurnameValid = txtSurname.editText?.text?.isNotEmpty() == true
         val isEmailValid = txtEmail.editText?.text?.isNotEmpty() == true
@@ -70,14 +71,42 @@ class RegisterClientActivity : AppCompatActivity() {
 
     private fun registerClient() {
         if (areFieldsValid()) {
-            // TODO: eliminar la línea a continuación y registrar cliente en la base de datos
-            SnackbarUtils
-                .showCustomSnackbar(this, "Ya se puede registrar", "success")
-                .show()
+
+            val name = txtName.editText?.text.toString()
+            val surname = txtSurname.editText?.text.toString()
+            val dni = txtDNI.editText?.text.toString()
+            val mail = txtEmail.editText?.text.toString()
+            val clientTypeText = clientType.text.toString()
+            val healthCheckStatus = if (healthCheck.isChecked) 1 else 0
+
+            dbHelper.registrarCliente(
+                    nombreC = name,
+                    apellidoC = surname,
+                    dniC = dni,
+                    correoC = mail,
+                    tipoC = clientTypeText,
+                    aptoFisico = healthCheckStatus)
+
+
+            Toast.makeText(this, "Cliente registrado exitosamente con ID  ", Toast.LENGTH_SHORT).show()
+            clearFields()
+            returnToPrevView()
+
         } else {
-            SnackbarUtils
-                .showCustomSnackbar(this, "Los campos no deben estar vacíos", "error")
-                .show()
-        }
+            Toast.makeText(this, "Los campos no pueden estar vacíos", Toast.LENGTH_SHORT).show()
+          }
     }
+
+
+     private fun clearFields() {
+        txtName.editText?.text?.clear()
+        txtSurname.editText?.text?.clear()
+        txtEmail.editText?.text?.clear()
+        txtDNI.editText?.text?.clear()
+        clientType.setText("")
+        healthCheck.isChecked = false
+    }
+
+
+
 }

@@ -6,7 +6,12 @@ import com.google.android.material.snackbar.Snackbar
 
 class SnackbarUtils {
     companion object {
-        fun showCustomSnackbar(activity: Activity, message: String, type: String, duration: Int = Snackbar.LENGTH_LONG): Snackbar {
+        fun showCustomSnackbar(
+            activity: Activity,
+            message: String,
+            type: String,
+            duration: Int = Snackbar.LENGTH_LONG
+        ): Snackbar {
             val snackbar = Snackbar.make(
                 activity.findViewById(android.R.id.content),
                 message,

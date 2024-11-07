@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.mediadocena.clubdeportivo.dataclasses.MemberDetails
 import com.mediadocena.clubdeportivo.dataclasses.Usuario
 
 class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null,DATABASE_VERSION) {
@@ -290,10 +291,8 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
-}
-
     // Método para insertar el registro de pago en la tabla cuotas
-/*
+
     fun registrarPago(
         idCliente: Int,
         fecha: String,
@@ -319,4 +318,37 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
 
 
     }
-*/
+
+
+    fun listarSociosCuotasAVenc(fecha: String): List<MemberDetails>  {
+        val membersList = mutableListOf<MemberDetails>()
+        val db = this.readableDatabase
+        val query = """
+            SELECT c.idCliente, concat(c.nombreC, ' ', c.apellidoC) as nombreCompleto, 
+            c.telC, c.correoC, cu.monto, cu.fecha, cu.fechaVence
+            FROM clientes as c
+            INNER JOIN cuotas as cu ON c.idCliente = cu.idCliente
+            WHERE c.tipoC = 'Socio' AND cu.fechaVence = ? ORDER BY nombreCompleto;
+        """
+        val cursor = db.rawQuery(query, arrayOf(fecha))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("idCliente"))
+                val nombreCompleto = cursor.getString(cursor.getColumnIndexOrThrow("nombreCompleto"))
+                val tel = cursor.getString(cursor.getColumnIndexOrThrow("telC"))
+                val correo = cursor.getString(cursor.getColumnIndexOrThrow("correoC"))
+                val monto = cursor.getFloat(cursor.getColumnIndexOrThrow("monto")).toDouble()
+                val fechaPago = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+                val fechaVence = cursor.getString(cursor.getColumnIndexOrThrow("fechaVence"))
+
+                membersList.add(MemberDetails(id,nombreCompleto,tel,correo,monto,fechaPago,fechaVence))
+
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return membersList
+    }
+}
+

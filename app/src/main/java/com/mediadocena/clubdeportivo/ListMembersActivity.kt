@@ -128,8 +128,8 @@ class ListMembersActivity : AppCompatActivity() {
                 "Teléfono: ${member.telefono}",
                 "Correo: ${member.correo}",
                 "Abonó: ${member.montoAbono}",
-                "F.Últ.Pago: ${member.fecUltPago}",
-                "F.Vencimiento: ${member.fecVencPago}"
+                "F.Últ.Pago: ${formatInputDate(member.fecUltPago, "yyyy-MM-dd", "dd-MM-yyyy") }",
+                "F.Vencimiento: ${formatInputDate(member.fecVencPago, "yyyy-MM-dd", "dd-MM-yyyy")}"
             )
             listDataChild[member.nombreCompleto] = memberDetails
         }
@@ -141,9 +141,9 @@ class ListMembersActivity : AppCompatActivity() {
         finish() // To close current activity
     }
 
-    private fun formatInputDate(fecha:String):String {
-        val originalFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    private fun formatInputDate(fecha:String, originalF: String = "dd/MM/yyyy", targetF: String = "yyyy-MM-dd"):String {
+        val originalFormat = SimpleDateFormat(originalF, Locale.getDefault())
+        val targetFormat = SimpleDateFormat(targetF, Locale.getDefault())
         return try {
             val date = originalFormat.parse(fecha)
             if (date != null) {

@@ -18,12 +18,13 @@ class CarnetSocio : AppCompatActivity() {
         // LOGICA BOTON VOLVER
         val btnVolver = findViewById<Button>(R.id.backButton)
         btnVolver.setOnClickListener{
-            val intent = Intent(this, AbonarCuotaActivity::class.java)
+            val intent = Intent(this, AbonarCuotaSocioActivity::class.java)
+            intent.putExtra("ID_CLIENTE", idCliente.toString())
             startActivity(intent)
         }
 
         // LOGICA BOTON MENU
-        val homeButton = findViewById<Button>(R.id.homeButton)
+        val homeButton = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.homeButton)
         homeButton.setOnClickListener{
             val intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)

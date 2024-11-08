@@ -34,6 +34,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
 
     // Para almacenar los datos de la cardview seleccionada
     private var nomAct: String = ""
+    private var idAct: Int = 0
     private var priceAct: Double = 00.0
 
 
@@ -45,9 +46,14 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         //Initialize all components
         initComponents()
 
+        // LOGICA CAPTURA DE ID ENVIADO EN EL INTENT
+        val idClienteVar = intent.getStringExtra("ID_CLIENTE")?.toIntOrNull()
+        var idCliente = 0
+        if (idClienteVar != null) { idCliente = idClienteVar }
+
         // Se obtiene la lista de actividades de la BD
         val datos = ClubDatabaseHelper(this)
-        var lista = datos.ObtenerActividadesDisp()
+        var lista = datos.ObtenerActividadesDisponibles(idCliente)
 
         // Asignamos la lista de actividades a Activities
         activities = lista
@@ -69,10 +75,6 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
             startActivity(intentAtras)
         }
 
-        // LOGICA CAPTURA DE ID ENVIADO EN EL INTENT
-        val idClienteVar = intent.getStringExtra("ID_CLIENTE")?.toIntOrNull()
-        var idCliente = 0
-        if (idClienteVar != null) { idCliente = idClienteVar }
 
         val cboFormaPago = findViewById<AutoCompleteTextView>(R.id.acTvPaymentMethod)
         val errorAbonoNoSocio = findViewById<LinearLayoutCompat>(R.id.errorAbonoNoSocio)
@@ -81,6 +83,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         val botonRegistrarPago = findViewById<Button>(R.id.btnRegistrarPagoNoSocio)
         botonRegistrarPago.setOnClickListener{
             val nombre = nomAct
+            val id = idAct
             val price = priceAct
             if (nombre != "" && price != 00.0) {
                 val cuota: Cuota // INSTANCIA CLASE CUOTA
@@ -130,10 +133,22 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
                         cuota.tienePromo,
                         cuota.detalle
                     )
+                    // Evaluamos si el pago se registro correctamente
                     if (resultado != -1L) {
-                        val intent = Intent(this, AbonoExitoso::class.java)
-                        intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
-                        startActivity(intent)
+                        // Procedemos a inscribir al cliente en la actividad y a modificar el cupo disponible
+                        var cupoDisp = datos.ObtenerCupoDisp(id)
+                        if (cupoDisp > 0) {
+                            cupoDisp --
+                            val modificacion = datos.ModificarCupoDisponible(id, cupoDisp)
+                            if (modificacion == "1") {
+                                val insercion = datos.InscripcionNoSocio(cuota.idCliente, id, cuota.fecha)
+                                if (insercion != -1L) {
+                                    val intent = Intent(this, AbonoExitoso::class.java)
+                                    intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
+                                    startActivity(intent)
+                                }
+                            }
+                        }
                     }
                     else {
                         Snackbar.make(errorAbonoNoSocio,"Error: No se pudo registrar el pago " +
@@ -163,6 +178,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
         btnPrevious = findViewById(R.id.btnPrevious)
     }
 
+
     private fun initListeners() {
         setPaginationListeners()
     }
@@ -179,6 +195,7 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
                     val cardView = view as MaterialCardView
                     view.isChecked = !view.isChecked
                     nomAct = cardView.findViewById<TextView>(R.id.activity_name).text.toString()
+                    idAct = cardView.findViewById<TextView>(R.id.activity_id).text.toString().toInt()
                     priceAct = cardView.findViewById<TextView>(R.id.activity_price).text.toString().toDouble()
                     true
                 }

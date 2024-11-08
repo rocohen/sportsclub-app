@@ -37,9 +37,9 @@ class AbonarCuotaActivity : AppCompatActivity() {
         val errorAbono = findViewById<LinearLayoutCompat>(R.id.errorAbono)
 
         btnConfirmar.setOnClickListener{
-            val idCliente = txtIdCliente.text.toString()
+            val idCliente = txtIdCliente.text.toString().toInt()
             try {
-                if (idCliente.isEmpty()) {
+                if (idCliente == null) {
                     Snackbar.make(errorAbono,"Por favor, ingrese un numero de ID para continuar.", Snackbar.LENGTH_SHORT)
                         .setBackgroundTint(Color.RED)
                         .setTextColor(Color.WHITE)
@@ -61,7 +61,7 @@ class AbonarCuotaActivity : AppCompatActivity() {
                             // VALIDAMOS SI LA QUERY ARROJO UNA FECHA O NUM. CERO
                             if (queryVencimiento == "0") {
                                 val intent = Intent(this, AbonarCuotaSocioActivity::class.java)
-                                intent.putExtra("ID_CLIENTE", idCliente) // ENVIO ID CLIENTE
+                                intent.putExtra("ID_CLIENTE", idCliente.toString()) // ENVIO ID CLIENTE
                                 startActivity(intent)
                             }
                             else {
@@ -69,7 +69,7 @@ class AbonarCuotaActivity : AppCompatActivity() {
                                 var conversion = LocalDate.parse(queryVencimiento, DateTimeFormatter.ISO_DATE)
                                 if (conversion < LocalDate.now()) {
                                     val intent = Intent(this, AbonarCuotaSocioActivity::class.java)
-                                    intent.putExtra("ID_CLIENTE", idCliente) // ENVIO ID CLIENTE
+                                    intent.putExtra("ID_CLIENTE", idCliente.toString()) // ENVIO ID CLIENTE
                                     startActivity(intent)
                                 }
                                 else   {
@@ -83,7 +83,7 @@ class AbonarCuotaActivity : AppCompatActivity() {
                         }
                         "No Socio" -> {
                             val intent = Intent(this, NonAssociatePaymentActivity::class.java)
-                            intent.putExtra("ID_CLIENTE", idCliente) // ENVIO ID CLIENTE
+                            intent.putExtra("ID_CLIENTE", idCliente.toString()) // ENVIO ID CLIENTE
                             startActivity(intent)
                         }
                     }

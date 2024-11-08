@@ -34,16 +34,17 @@ class AbonarCuotaSocioActivity : AppCompatActivity() {
         // LOGICA BOTON VOLVER
         val iBtnVolver = findViewById<ImageButton>(R.id.iBtnVolver)
         iBtnVolver.setOnClickListener{
-            val intentVolver = Intent(this, AbonarCuotaActivity::class.java)
-            startActivity(intentVolver)
+            val intent = Intent(this, AbonarCuotaActivity::class.java)
+            startActivity(intent)
         }
 
 
         // LOGICA BOTON GENERAR CARNET
         val btnGenCarnet = findViewById<Button>(R.id.btnGenCarnet)
         btnGenCarnet.setOnClickListener{
-            val intentCarnet = Intent(this, CarnetSocio::class.java)
-            startActivity(intentCarnet)
+            val intent = Intent(this, CarnetSocio::class.java)
+            intent.putExtra("ID_CLIENTE", idCliente)
+            startActivity(intent)
         }
 
 
@@ -117,7 +118,7 @@ class AbonarCuotaSocioActivity : AppCompatActivity() {
                 // Evaluamos si el insert fue exitoso
                 if (resultado != -1L) {
                     val intent = Intent (this, AbonoExitoso::class.java)
-                    intent.putExtra("idCliente", cuota.idCliente) // ENVIO ID CLIENTE
+                    intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
                     startActivity(intent)
                 }
                 else {

@@ -105,4 +105,10 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/errorAbonoSocio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="35dp" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

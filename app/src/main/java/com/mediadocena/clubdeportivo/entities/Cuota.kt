@@ -1,12 +1,12 @@
 package com.mediadocena.clubdeportivo.entities
-import java.util.Date
+import java.time.LocalDate
 
 class Cuota(
-    var fecha: Date,
+    var idCliente: Int ,
+    var fecha: LocalDate,
     var monto: Double,
-    var idCliente: Int,
     var formaPago: String,
-    var fechaVencimiento: Date,
+    var fechaVencimiento: LocalDate,
     var tienePromo: Boolean,
     var detalle: String,
     var id: Int? = null
@@ -25,7 +25,7 @@ class Cuota(
     }
 
     fun aplicarPromocion(cantCuotas: Int) {
-        if (formaPago == "Tarjeta de crédito" && tienePromo) {
+        if ((formaPago == "Tarjeta 3 Cuotas (5% OFF, sin interes)" && tienePromo) or (formaPago == "Tarjeta 6 Cuotas (10% OFF, sin interes)" && tienePromo)) {
             when (cantCuotas) {
                 3 -> calcDescuento3Cuotas()
                 6 -> calcDescuento6Cuotas()

@@ -160,18 +160,25 @@
     </com.google.android.material.textfield.TextInputLayout>
     <!--  End of Payment method-->
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="85dp"
-        android:fontFamily="@font/roboto_medium"
-        android:letterSpacing="0.1"
-        android:text="@string/btn_title"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:backgroundTint="@color/green_700" />
+       <com.google.android.material.button.MaterialButton
+           android:id="@+id/btnRegistrarPagoNoSocio"
+           android:layout_width="250dp"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_marginTop="85dp"
+           android:fontFamily="@font/roboto_medium"
+           android:letterSpacing="0.1"
+           android:text="@string/btn_title"
+           android:textAllCaps="true"
+           android:textColor="@color/white"
+           android:textSize="16sp"
+           app:backgroundTint="@color/green_700" />
    </LinearLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/errorAbonoNoSocio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="-95dp" />
 
 </LinearLayout>

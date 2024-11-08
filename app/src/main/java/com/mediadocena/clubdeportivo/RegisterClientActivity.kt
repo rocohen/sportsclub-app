@@ -1,6 +1,7 @@
 package com.mediadocena.clubdeportivo
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.AutoCompleteTextView
 import android.widget.Button
@@ -64,11 +65,11 @@ class RegisterClientActivity : AppCompatActivity() {
 
     private fun areFieldsValid(): Boolean {
         /* Verificamos que los TextInputLayout y el AutoCompleteTextView no estén vacíos*/
-        val isNameValid = txtName.editText?.text?.isNotEmpty() == true
-        val isSurnameValid = txtSurname.editText?.text?.isNotEmpty() == true
-        val isEmailValid = txtEmail.editText?.text?.isNotEmpty() == true
-        val isDNIValid = txtDNI.editText?.text?.isNotEmpty() == true
-        val isPhoneValid = txtPhone.editText?.text?.isNotEmpty() == true
+        val isNameValid = txtName.editText?.text?.trim()?.isNotEmpty() == true
+        val isSurnameValid = txtSurname.editText?.text?.trim()?.isNotEmpty() == true
+        val isEmailValid = txtEmail.editText?.text?.trim()?.isNotEmpty() == true
+        val isDNIValid = txtDNI.editText?.text?.trim()?.isNotEmpty() == true
+        val isPhoneValid = txtPhone.editText?.text?.trim()?.isNotEmpty() == true
         val isClientTypeValid = clientTypes.contains(clientType.text.toString())
 
         return isNameValid && isSurnameValid && isEmailValid && isDNIValid && isClientTypeValid && isPhoneValid
@@ -96,25 +97,34 @@ class RegisterClientActivity : AppCompatActivity() {
             )
 
             if (resultado == -1L){
-                Toast.makeText(this, "No se pudo realizar el registro", Toast.LENGTH_SHORT).show()
-
+                SnackbarUtils
+                    .showCustomSnackbar(this, "Error: No se pudo realizar el registro", "error")
+                    .setAnchorView(btnRegisterClient)
+                    .show()
             }else if (resultado == -2L){
-                Toast.makeText(this, "El cliente ya está registrado", Toast.LENGTH_SHORT).show()
-
+                SnackbarUtils
+                    .showCustomSnackbar(this, "El cliente ya está registrado", "error")
+                    .setAnchorView(btnRegisterClient)
+                    .show()
             }else{
                 SnackbarUtils
                     .showCustomSnackbar(this, "Cliente registrado exitosamente con ID $resultado ", "success", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Abonar"){
+                    .setAction("ABONAR"){
                         val intent = Intent(this, AbonarCuotaActivity::class.java)
-                        intent.putExtra("idCliente", resultado)
+                        intent.putExtra("idCliente", resultado.toString())
                         startActivity(intent)
                         //sino eliminar setAction y llamar a la funcion returnToPrevView()
                     }
+                    .setActionTextColor(Color.WHITE)
+                    .setAnchorView(btnRegisterClient)
                     .show()
             }
 
         } else {
-            Toast.makeText(this, "Los campos no pueden estar vacíos", Toast.LENGTH_SHORT).show()
+            SnackbarUtils
+                .showCustomSnackbar(this, "Error: los campos no pueden estar vacíos", "error")
+                .setAnchorView(btnRegisterClient)
+                .show()
           }
     }
 

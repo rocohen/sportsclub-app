@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.mediadocena.clubdeportivo.ActivityModel
+import com.mediadocena.clubdeportivo.dataclasses.MemberDetails
 import com.mediadocena.clubdeportivo.dataclasses.Usuario
 import com.mediadocena.clubdeportivo.entities.Cliente
 import java.time.LocalDate
@@ -231,7 +232,7 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         db?.execSQL("DROP TABLE IF EXISTS cuotas");
         db?.execSQL("DROP TABLE IF EXISTS actividades");
         db?.execSQL("DROP TABLE IF EXISTS clienactiv");
-        onCreate(db);
+        onCreate(db)
     }
 
 
@@ -265,21 +266,37 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         telC: String,
         correoC: String,
         tipoC: String,
-        aptoFisico: Boolean
+        aptoFisico: Int
     ): Long {
         val db = this.writableDatabase
+
+        // Primero verificamos por el DNI si el cliente ya existe en la base de datos
+        val cursor = db.rawQuery("SELECT 1 FROM clientes WHERE DNIC = ?", arrayOf(dniC))
+        val existe = cursor.moveToFirst()
+        cursor.close()
+
+        if (existe) {
+            db.close()
+            return -2
+        }
+
+        // Si el DNI no existe, procedemos a registrar al nuevo cliente
         val valores = ContentValues().apply {
             put("nombreC", nombreC)
             put("apellidoC", apellidoC)
             put("DNIC", dniC)
             put("telC", telC)
             put("correoC", correoC)
+            put("tipoC", tipoC)
             put("aptoFisico", aptoFisico)
-            put("estado", 1)
+            put("estadoC", 1)
         }
 
-        // Hacemos el insert en la tabla "clientes"
-        return db.insert("clientes", null, valores).also { db.close() }
+        val result = db.insert("clientes", null, valores)
+        db.close()
+
+        return if (result == -1L) -1 else result
+
     }
 
 
@@ -305,8 +322,40 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
         // Insertamos los valores en la tabla "cuotas"
         return db.insert("cuotas", null, valores).also { db.close() }
+
     }
 
+
+    fun listarSociosCuotasAVenc(fecha: String): List<MemberDetails>  {
+        val membersList = mutableListOf<MemberDetails>()
+        val db = this.readableDatabase
+        val query = """
+            SELECT c.idCliente, concat(c.nombreC, ' ', c.apellidoC) as nombreCompleto, 
+            c.telC, c.correoC, cu.monto, cu.fecha, cu.fechaVence
+            FROM clientes as c
+            INNER JOIN cuotas as cu ON c.idCliente = cu.idCliente
+            WHERE c.tipoC = 'Socio' AND cu.fechaVence = ? ORDER BY nombreCompleto;
+        """
+        val cursor = db.rawQuery(query, arrayOf(fecha))
+
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow("idCliente"))
+                val nombreCompleto = cursor.getString(cursor.getColumnIndexOrThrow("nombreCompleto"))
+                val tel = cursor.getString(cursor.getColumnIndexOrThrow("telC"))
+                val correo = cursor.getString(cursor.getColumnIndexOrThrow("correoC"))
+                val monto = cursor.getFloat(cursor.getColumnIndexOrThrow("monto")).toDouble()
+                val fechaPago = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+                val fechaVence = cursor.getString(cursor.getColumnIndexOrThrow("fechaVence"))
+
+                membersList.add(MemberDetails(id,nombreCompleto,tel,correo,monto,fechaPago,fechaVence))
+
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+        db.close()
+        return membersList
+    }
 
     //Metodo para devolver tipo de cliente
     fun ObtenerTipoCliente(id: Int) :  String {
@@ -410,8 +459,6 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-
-
     // Metodo para inscribir al no socio en la tabla clienactv
     fun InscripcionNoSocio (idC : Int, idA: Int, fecIn: LocalDate) : Long {
         val db = this.writableDatabase
@@ -423,8 +470,6 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         // Insertamos los valores en la tabla "cuotas"
         return db.insert("clienactiv", null, valores).also { db.close() }
     }
-
-
 
     // Metodo para obtener actividades con cupo disponible
     fun ObtenerActividadesDisponibles (id : Int): MutableList<ActivityModel> {
@@ -464,3 +509,4 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return listaActividades
     }
 }
+

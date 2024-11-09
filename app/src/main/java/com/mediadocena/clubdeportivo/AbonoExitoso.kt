@@ -21,6 +21,7 @@ class AbonoExitoso : AppCompatActivity() {
             val intent = Intent(this, PaymentReceipt::class.java)
             intent.putExtra("ID_CLIENTE", idCliente) // ENVIO ID CLIENTE
             startActivity(intent)
+            finish()
         }
     }
 }

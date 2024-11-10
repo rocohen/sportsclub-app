@@ -2,6 +2,7 @@ package com.mediadocena.clubdeportivo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,14 +13,32 @@ class AbonoExitoso : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_abono_exitoso)
 
-        // LOGICA PARA CAPTURAR EL ID CLIENTE ENVIADO EN EL INTENT
+        // Lógica para capturar el ID cliente enviado en el intent
         val idCliente = intent.getIntExtra("ID_CLIENTE", 0)
 
-        // LOGICA BOTON GENERAR COMPROBANTE
+        // Obtener datos con valores predeterminados en caso de que sean nulos
+        val formaPago = intent.getStringExtra("FORMA_PAGO") ?: "Sin especificar"
+        val montoPago = intent.getDoubleExtra("MONTO_PAGO", 0.0)
+        val fechaPago = intent.getStringExtra("FECHA_PAGO") ?: "Sin especificar"
+        val fechaVencimiento = intent.getStringExtra("FECHA_VENCIMIENTO") ?: "Sin especificar"
+        val detallePago = intent.getStringExtra("DETALLE_PAGO") ?: "Sin especificar"
+
+        // Depuración: ver los valores que se van a enviar a PaymentReceipt
+        Log.d("AbonoExitoso", "FORMA_PAGO: $formaPago, MONTO_PAGO: $montoPago, FECHA_PAGO: $fechaPago, FECHA_VENCIMIENTO: $fechaVencimiento, DETALLE_PAGO: $detallePago")
+
+        // Lógica botón Generar Comprobante
         val btnGenerarComprobante = findViewById<Button>(R.id.btnGenerarComprobante)
-        btnGenerarComprobante.setOnClickListener{
+        btnGenerarComprobante.setOnClickListener {
             val intent = Intent(this, PaymentReceipt::class.java)
-            intent.putExtra("ID_CLIENTE", idCliente) // ENVIO ID CLIENTE
+            intent.putExtra("ID_CLIENTE", idCliente) // Enviar ID cliente
+
+            // Enviar datos solo si son válidos
+            intent.putExtra("FORMA_PAGO", formaPago)
+            intent.putExtra("MONTO_PAGO", montoPago)
+            intent.putExtra("FECHA_PAGO", fechaPago)
+            intent.putExtra("FECHA_VENCIMIENTO", fechaVencimiento)
+            intent.putExtra("DETALLE_PAGO", detallePago)
+
             startActivity(intent)
         }
     }

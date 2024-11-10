@@ -119,6 +119,16 @@ class AbonarCuotaSocioActivity : AppCompatActivity() {
                 if (resultado != -1L) {
                     val intent = Intent (this, AbonoExitoso::class.java)
                     intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
+
+                    // AGREGUE ESTO PORQUE ME SALIA ERROR AL CARGAR LOS DATOS DESDE BBDD
+
+                    intent.putExtra("FORMA_PAGO", cuota.formaPago) // ENVIO FORMA DE PAGO
+                    intent.putExtra("MONTO_PAGO", cuota.monto) // ENVIO MONTO
+                    intent.putExtra("FECHA_PAGO", cuota.fecha.toString()) // ENVIO FECHA
+                    intent.putExtra("FECHA_VENCIMIENTO", cuota.fechaVencimiento.toString()) // ENVIO FECHA VENCIMIENTO
+                    intent.putExtra("DETALLE_PAGO", cuota.detalle) // ENVIO DETALLE
+
+
                     startActivity(intent)
                 }
                 else {

@@ -10,6 +10,7 @@ import com.mediadocena.clubdeportivo.ActivityModel
 import com.mediadocena.clubdeportivo.dataclasses.MemberDetails
 import com.mediadocena.clubdeportivo.dataclasses.Usuario
 import com.mediadocena.clubdeportivo.entities.Cliente
+import com.mediadocena.clubdeportivo.entities.Cuota
 import java.time.LocalDate
 
 class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null,DATABASE_VERSION) {
@@ -508,5 +509,64 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
         return listaActividades
     }
+
+
+    // Metodo para obtener la última cuota por idCliente
+    fun obtenerUltimaCuotaPorIdCliente(idCliente: Int): Cuota? {
+        val db = this.readableDatabase
+        var ultimaCuota: Cuota? = null
+
+        // Consulta SQL para obtener la última cuota por id_cliente (ordenada por fecha descendente)
+        val query = """
+    SELECT * FROM cuotas 
+    WHERE idCliente = ? 
+    ORDER BY fecha DESC 
+    LIMIT 1
+    """
+        val cursor = db.rawQuery(query, arrayOf(idCliente.toString()))
+
+        if (cursor.moveToFirst()) {
+            ultimaCuota = Cuota(
+                idCliente = cursor.getInt(cursor.getColumnIndexOrThrow("idCliente")), // Corregido nombre de columna
+                fecha = LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("fecha"))), // Nombre de columna correcto
+                monto = cursor.getDouble(cursor.getColumnIndexOrThrow("monto")),
+                formaPago = cursor.getString(cursor.getColumnIndexOrThrow("formaPago")), // Corregido nombre de columna
+                fechaVencimiento = LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("fechaVence"))), // Corregido nombre de columna
+                tienePromo = cursor.getInt(cursor.getColumnIndexOrThrow("tienePromo")) > 0, // Corregido nombre de columna
+                detalle = cursor.getString(cursor.getColumnIndexOrThrow("detalle"))
+            )
+        }
+
+        cursor.close()
+        db.close()
+
+        return ultimaCuota
+    }
+
+
+    // Metodo para obtener el nombre completo de un cliente
+    fun obtenerNombreCompletoPorIdCliente(idCliente: Int): String? {
+        val db = this.readableDatabase
+        var nombreCompleto: String? = null
+
+        // Consulta SQL para obtener el nombre completo del cliente
+        val query = """
+        SELECT (nombreC || ' ' || apellidoC) AS nombreCompleto
+        FROM clientes
+        WHERE idCliente = ?
+    """
+        val cursor = db.rawQuery(query, arrayOf(idCliente.toString()))
+
+        if (cursor.moveToFirst()) {
+            nombreCompleto = cursor.getString(cursor.getColumnIndexOrThrow("nombreCompleto"))
+        }
+
+        cursor.close()
+        db.close()
+
+        return nombreCompleto
+    }
+
+
 }
 

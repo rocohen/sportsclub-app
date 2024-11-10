@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/NonAssociatePaymentActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="30dp"
+    tools:context=".NonAssociatePaymentActivity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="35dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/imgBtnBack"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/arrow_back_icon"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/pay_activity_title"
+            android:textColor="@color/high_dark_blue"
+            android:textSize="16sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!--  List of sports activities-->
+    <LinearLayout
+        android:id="@+id/layoutActivityList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--    Sport activity 01-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardActivity01"
+            style="?attr/materialCardViewElevatedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:checkable="true"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#F1E8FF"
+            app:checkedIconTint="@color/medium_green">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="28dp"
+                        android:text="@string/activity_name_title"
+                        android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?attr/textAppearanceTitleMedium"
+                        android:textColor="?android:attr/textColorSecondary"
+                        tools:text="@string/activity_id" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:text="@string/activity_price_title"
+                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="28dp"
+                        android:text="@string/activity_price"
+                        android:textAppearance="?attr/textAppearanceBodyMedium" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <!--   End of Sport activity 01-->
+    </LinearLayout>
+    <!--  End of List of sports activities-->
+
+<!--    Pagination buttons-->
+    <LinearLayout
+        android:id="@+id/btnBarPagination"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPrevious"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/previous_btn"
+            android:textSize="16sp"
+            android:enabled="false"
+            android:layout_marginEnd="95dp" /> <!-- Disabled initially because we are on the first page -->
+
+        <Button
+            android:id="@+id/btnNext"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="@string/next_btn" />
+    </LinearLayout>
+    <!--  End of Pagination buttons-->
+
+    <!--  Payment method-->
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:gravity="bottom"
+       android:layout_marginBottom="95dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:boxStrokeColor="@color/medium_green">
+
+        <AutoCompleteTextView
+            android:id="@+id/acTvPaymentMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:labelFor="@+id/acTvPaymentMethod"
+            android:text="@string/payment_method_hint"
+            android:textColor="@color/dark_gray"
+            android:textStyle="bold"
+            app:simpleItems="@array/payment_method_options" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <!--  End of Payment method-->
+
+       <com.google.android.material.button.MaterialButton
+           android:id="@+id/btnRegistrarPagoNoSocio"
+           android:layout_width="250dp"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_marginTop="85dp"
+           android:fontFamily="@font/roboto_medium"
+           android:letterSpacing="0.1"
+           android:text="@string/btn_title"
+           android:textAllCaps="true"
+           android:textColor="@color/white"
+           android:textSize="16sp"
+           app:backgroundTint="@color/green_700" />
+   </LinearLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/errorAbonoNoSocio"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="-95dp" />
+
+</LinearLayout>

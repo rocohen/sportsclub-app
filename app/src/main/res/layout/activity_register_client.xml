@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerClient"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    tools:context=".RegisterClientActivity">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:gravity="center_vertical">
+
+        <ImageButton
+            android:id="@+id/iBtnBack"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/white"
+            android:contentDescription="@string/arrow_back_icon"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/client_register_title"
+            android:textColor="@color/high_dark_blue"
+            android:textSize="16sp" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!--Start of registration form-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Start of Name placeholder-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_placeholder"
+            app:boxStrokeColor="@color/medium_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="30">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="30"
+                android:textColor="@color/high_dark_blue"
+                android:textStyle="bold"
+                app:errorEnabled="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--End of Name placeholder-->
+        <!-- Start of Surname placeholder-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtSurname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="@string/surname_placeholder"
+            app:boxStrokeColor="@color/medium_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="40">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLength="40"
+                android:textColor="@color/high_dark_blue"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- End of Surname placeholder-->
+        <!-- Start of Email placeholder-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="@string/email_placeholder"
+            app:boxStrokeColor="@color/medium_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="50">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:maxLength="50"
+                android:textColor="@color/high_dark_blue"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- End of Email placeholder-->
+        <!-- Start of Phone placeholder-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="@string/phone_placeholder"
+            android:inputType="number|phone"
+            app:boxStrokeColor="@color/medium_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="20">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="20"
+                android:textColor="@color/high_dark_blue"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- End of Phone placeholder-->
+        <!-- Start of DNI placeholder-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtDNI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="@string/dni_placeholder"
+            android:inputType="textEmailAddress"
+            app:boxStrokeColor="@color/medium_green"
+            app:counterEnabled="true"
+            app:counterMaxLength="50">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="50"
+                android:textColor="@color/high_dark_blue"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- End of DNI placeholder-->
+        <!-- Start of type of club client-->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            app:boxStrokeColor="@color/medium_green"
+           >
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompTvClientType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:labelFor="@+id/autoCompTvClientType"
+                android:textStyle="bold"
+                android:text="@string/club_client_type_placeholder"
+                android:textColor="@color/dark_gray"
+                app:simpleItems="@array/client_type"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        <!-- End of type of club client-->
+        <!--  Start of health check-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="2dp">
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/healthCheck"
+                style="@style/Widget.App.Switch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:text="@string/health_check_title"
+                android:textColor="@color/dark_gray"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!--  End of health check-->
+        <!--  Start of required notice-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/required_notice"
+            android:textColor="@color/red_info"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+        <!--  End of required notice-->
+        <!--  Action button to register client-->
+        <Button
+            android:id="@+id/btnRegisterClient"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="33dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/green_700"
+            android:letterSpacing="0.1"
+            android:text="@string/register_btn"
+            android:textAllCaps="true" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>

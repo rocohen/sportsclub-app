@@ -5,139 +5,15 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="115dp"
-        android:contentDescription="@string/app_logo"
-        android:src="@drawable/ic_logo"
-        app:layout_constraintBottom_toTopOf="@+id/user"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="82dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/pass"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/app_icon_user"
-            android:src="@drawable/ic_user"
-            app:tint="@color/medium_green" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutUser"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/login_user_hint"
-            app:boxBackgroundMode="none"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/gray">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etUser"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="username"
-                android:backgroundTint="@android:color/transparent"
-                android:fontFamily="@font/mulish_semi_bold"
-                android:inputType="text"
-                android:maxLength="16"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/high_dark_green"
-                android:textSize="18sp" />
-
-            <View
-                android:layout_width="265dp"
-                android:layout_height="2dp"
-                android:layout_marginStart="18dp"
-                android:background="@color/medium_green" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/user">
-
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="5dp"
-            android:contentDescription="@string/app_icon_user"
-            android:src="@drawable/ic_lock"
-            app:tint="@color/medium_green" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayoutPass"
-            android:layout_width="290dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/login_pass_hint"
-            app:boxBackgroundMode="none"
-            app:endIconMode="password_toggle"
-            app:hintEnabled="true"
-            app:hintTextColor="@color/gray">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPass"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints="password"
-                android:backgroundTint="@android:color/transparent"
-                android:fontFamily="@font/mulish_semi_bold"
-                android:inputType="textPassword"
-                android:maxLength="16"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/high_dark_green"
-                android:textSize="18sp" />
-
-            <View
-                android:layout_width="265dp"
-                android:layout_height="2dp"
-                android:layout_marginStart="18dp"
-                android:background="@color/medium_green" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogin"
-        android:layout_width="290dp"
-        android:layout_height="wrap_content"
-        android:background="@color/medium_green"
-        android:fontFamily="@font/mulish_semi_bold"
-        android:letterSpacing="0.2"
-        android:text="@string/login"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pass"
-        android:layout_marginBottom="45dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

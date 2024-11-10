@@ -5,9 +5,13 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.mediadocena.clubdeportivo.ActivityModel
+import com.mediadocena.clubdeportivo.dataclasses.ClubMemberIdCard
 import com.mediadocena.clubdeportivo.dataclasses.MemberDetails
+import com.mediadocena.clubdeportivo.dataclasses.PaymentDetails
 import com.mediadocena.clubdeportivo.dataclasses.Usuario
 import com.mediadocena.clubdeportivo.entities.Cliente
 import java.time.LocalDate
@@ -507,6 +511,76 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
             db.close()
         }
         return listaActividades
+    }
+
+    fun obtenerDetallesUltPago(id : Int) : PaymentDetails? {
+        val db = this.readableDatabase
+        val query = """
+            SELECT ctas.idCliente, concat(c.nombreC, ' ', c.apellidoC) as nombreCompleto,
+             ctas.fecha, ctas.fechaVence, ctas.monto, ctas.formaPago, ctas.detalle, c.correoC
+            FROM cuotas ctas
+            INNER JOIN clientes c on ctas.idCliente = c.idCliente
+            WHERE ctas.idCliente = ? 
+            ORDER BY ctas.idCuota DESC LIMIT 1;
+        """
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        var paymentDetails: PaymentDetails? = null
+        try {
+            if (cursor.moveToFirst()) {
+                val idCliente = cursor.getInt(cursor.getColumnIndexOrThrow("idCliente"))
+                val nombreCompleto = cursor.getString(cursor.getColumnIndexOrThrow("nombreCompleto"))
+                val fechaPago = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
+                val fechaVenc = cursor.getString(cursor.getColumnIndexOrThrow("fechaVence"))
+                val montoAbono = cursor.getDouble(cursor.getColumnIndexOrThrow("monto"))
+                val formaPago = cursor.getString(cursor.getColumnIndexOrThrow("formaPago"))
+                val detalle = cursor.getString(cursor.getColumnIndexOrThrow("detalle"))
+                val correo = cursor.getString(cursor.getColumnIndexOrThrow("correoC"))
+
+                paymentDetails = PaymentDetails(idCliente,nombreCompleto,fechaPago,fechaVenc,montoAbono,formaPago,detalle,correo)
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al obtener los detalles de pago: ${e.message}")
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return paymentDetails;
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun obtenerCarnetSocioData(id : Int) : ClubMemberIdCard? {
+        val db = this.readableDatabase
+        val query = """
+            SELECT idCliente,nombreC,apellidoC,correoC
+            FROM clientes
+            WHERE idCliente = ?
+        """
+        val cursor = db.rawQuery(query, arrayOf(id.toString()))
+        var clubMemberIdCard: ClubMemberIdCard? = null
+        val anio = LocalDate.now().year.toString()
+        try {
+            if (cursor.moveToFirst()) {
+                val idCliente = cursor.getInt(cursor.getColumnIndexOrThrow("idCliente"))
+                val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombreC"))
+                val apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellidoC"))
+                val correo = cursor.getString(cursor.getColumnIndexOrThrow("correoC"))
+
+                clubMemberIdCard = ClubMemberIdCard(idCliente,nombre,apellido,correo,anio)
+
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al obtener los detalles del carnet de socio: ${e.message}")
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return clubMemberIdCard
     }
 }
 

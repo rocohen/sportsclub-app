@@ -36,6 +36,10 @@ class AbonarCuotaActivity : AppCompatActivity() {
         val txtIdCliente = findViewById<TextView>(R.id.editTxtIdCliente)
         val errorAbono = findViewById<LinearLayoutCompat>(R.id.errorAbono)
 
+        // LOGICA CAPTURA DE ID ENVIADO EN EL INTENT DESDE EL REGISTRO EXITOSO DEL CLIENTE
+        val idClienteStr = intent.getStringExtra("idCliente")
+        if (!idClienteStr.isNullOrEmpty()) { txtIdCliente.text = idClienteStr }
+
         btnConfirmar.setOnClickListener{
             val idCliente = txtIdCliente.text.toString().toInt()
             try {

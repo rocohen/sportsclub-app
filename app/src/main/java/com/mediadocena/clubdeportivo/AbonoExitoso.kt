@@ -23,5 +23,7 @@ class AbonoExitoso : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
+
     }
 }

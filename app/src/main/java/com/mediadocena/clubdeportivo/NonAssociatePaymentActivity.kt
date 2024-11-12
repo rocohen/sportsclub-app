@@ -86,77 +86,87 @@ class NonAssociatePaymentActivity : AppCompatActivity() {
             val id = idAct
             val price = priceAct
             if (nombre != "" && price != 00.0) {
-                val cuota: Cuota // INSTANCIA CLASE CUOTA
-                var cantidadCuotas = 0 // Se asigna al valuar la forma de pago
+                // Validamos is el cliente tiene registrado el pago en la actividad elegida
+                val resultado = datos.ValidarPagoActividad(id.toString(), idCliente.toString())
+                if (resultado == "0") {
+                    val cuota: Cuota // INSTANCIA CLASE CUOTA
+                    var cantidadCuotas = 0 // Se asigna al valuar la forma de pago
 
-                // Variables para instanciar un objeto CUOTA
-                val fechaPago: LocalDate = LocalDate.now()
-                var monto: Double = priceAct
-                val formaPago: String = cboFormaPago.text.toString()
-                val fechaVence: LocalDate = LocalDate.now()
-                var tienePromo: Boolean = false
-                val detallePago: String = "Abono de actividad ${nomAct}"
+                    // Variables para instanciar un objeto CUOTA
+                    val fechaPago: LocalDate = LocalDate.now()
+                    var monto: Double = priceAct
+                    val formaPago: String = cboFormaPago.text.toString()
+                    val fechaVence: LocalDate = LocalDate.now()
+                    var tienePromo: Boolean = false
+                    val detallePago: String = "Abono de actividad ${nomAct}"
 
-                if (formaPago == "Forma de pago") {
-                    Snackbar.make(errorAbonoNoSocio,"Error: Debe seleccionar una forma de pago valida.", Snackbar.LENGTH_SHORT)
-                        .setBackgroundTint(Color.RED)
-                        .setTextColor(Color.WHITE)
-                        .show()
-                }
-                else {
-                    when (formaPago) {
-                        "Tarjeta 3 Cuotas (5% OFF, sin interes)" -> {
-                            tienePromo = true
-                            cantidadCuotas = 3
-                        }
-                        "Tarjeta 6 Cuotas (10% OFF, sin interes)" -> {
-                            tienePromo = true
-                            cantidadCuotas = 6
-                        }
-                    }
-                    cuota = Cuota(
-                        idCliente,
-                        fechaPago,
-                        monto,
-                        formaPago,
-                        fechaVence,
-                        tienePromo,
-                        detallePago
-                    )
-                    cuota.aplicarPromocion(cantidadCuotas) // Luego de instanciar aplicamos la promocion
-                    val resultado = datos.registrarPago(
-                        cuota.idCliente,
-                        cuota.fecha.toString(),
-                        cuota.monto,
-                        cuota.formaPago,
-                        cuota.fechaVencimiento.toString(),
-                        cuota.tienePromo,
-                        cuota.detalle
-                    )
-                    // Evaluamos si el pago se registro correctamente
-                    if (resultado != -1L) {
-                        // Procedemos a inscribir al cliente en la actividad y a modificar el cupo disponible
-                        var cupoDisp = datos.ObtenerCupoDisp(id)
-                        if (cupoDisp > 0) {
-                            cupoDisp --
-                            val modificacion = datos.ModificarCupoDisponible(id, cupoDisp)
-                            if (modificacion == "1") {
-                                val insercion = datos.InscripcionNoSocio(cuota.idCliente, id, cuota.fecha)
-                                if (insercion != -1L) {
-                                    val intent = Intent(this, AbonoExitoso::class.java)
-                                    intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
-                                    startActivity(intent)
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        Snackbar.make(errorAbonoNoSocio,"Error: No se pudo registrar el pago " +
-                                "correctamente.", Snackbar.LENGTH_SHORT)
+                    if (formaPago == "Forma de pago") {
+                        Snackbar.make(errorAbonoNoSocio,"Error: Debe seleccionar una forma de pago valida.", Snackbar.LENGTH_SHORT)
                             .setBackgroundTint(Color.RED)
                             .setTextColor(Color.WHITE)
                             .show()
                     }
+                    else {
+                        when (formaPago) {
+                            "Tarjeta 3 Cuotas (5% OFF, sin interes)" -> {
+                                tienePromo = true
+                                cantidadCuotas = 3
+                            }
+                            "Tarjeta 6 Cuotas (10% OFF, sin interes)" -> {
+                                tienePromo = true
+                                cantidadCuotas = 6
+                            }
+                        }
+                        cuota = Cuota(
+                            idCliente,
+                            fechaPago,
+                            monto,
+                            formaPago,
+                            fechaVence,
+                            tienePromo,
+                            detallePago
+                        )
+                        cuota.aplicarPromocion(cantidadCuotas) // Luego de instanciar aplicamos la promocion
+                        val resultado = datos.registrarPago(
+                            cuota.idCliente,
+                            cuota.fecha.toString(),
+                            cuota.monto,
+                            cuota.formaPago,
+                            cuota.fechaVencimiento.toString(),
+                            cuota.tienePromo,
+                            cuota.detalle
+                        )
+                        // Evaluamos si el pago se registro correctamente
+                        if (resultado != -1L) {
+                            // Procedemos a inscribir al cliente en la actividad y a modificar el cupo disponible
+                            var cupoDisp = datos.ObtenerCupoDisp(id)
+                            if (cupoDisp > 0) {
+                                cupoDisp --
+                                val modificacion = datos.ModificarCupoDisponible(id, cupoDisp)
+                                if (modificacion == "1") {
+                                    val insercion = datos.InscripcionNoSocio(cuota.idCliente, id, cuota.fecha)
+                                    if (insercion != -1L) {
+                                        val intent = Intent(this, AbonoExitoso::class.java)
+                                        intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
+                                        startActivity(intent)
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            Snackbar.make(errorAbonoNoSocio,"Error: No se pudo registrar el pago " +
+                                    "correctamente.", Snackbar.LENGTH_SHORT)
+                                .setBackgroundTint(Color.RED)
+                                .setTextColor(Color.WHITE)
+                                .show()
+                        }
+                    }
+                }
+                else {
+                    Snackbar.make(errorAbonoNoSocio, "ERROR: El cliente ya abono la actividad seleccionada en el dia de la fecha.", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(Color.RED)
+                        .setTextColor(Color.WHITE)
+                        .show()
                 }
             }
             else {

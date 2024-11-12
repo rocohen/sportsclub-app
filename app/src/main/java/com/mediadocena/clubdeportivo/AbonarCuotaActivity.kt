@@ -41,15 +41,16 @@ class AbonarCuotaActivity : AppCompatActivity() {
         if (!idClienteStr.isNullOrEmpty()) { txtIdCliente.text = idClienteStr }
 
         btnConfirmar.setOnClickListener{
-            val idCliente = txtIdCliente.text.toString().toInt()
+            val idClienteParam = txtIdCliente.text.toString()
             try {
-                if (idCliente == null) {
+                if (idClienteParam.isEmpty()) {
                     Snackbar.make(errorAbono,"Por favor, ingrese un numero de ID para continuar.", Snackbar.LENGTH_SHORT)
                         .setBackgroundTint(Color.RED)
                         .setTextColor(Color.WHITE)
                         .show()
                 }
                 else {
+                    val idCliente = idClienteParam.toInt()
                     val datos = ClubDatabaseHelper(this)
                     val queryTipoCliente = datos.ObtenerTipoCliente(idCliente)
 

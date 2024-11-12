@@ -513,6 +513,36 @@ class ClubDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
         return listaActividades
     }
 
+    // Metodo para obtener actividades con cupo disponible
+    fun ValidarPagoActividad (idAct : String, idCli : String): String {
+        val db = this.readableDatabase
+        val query = """
+            SELECT idCliente
+            FROM clienactiv
+            WHERE DATE(fechaInscripcion) = DATE('now')
+            AND idActividad = ?
+            AND idCliente = ?
+        """
+        val selectionArgs = arrayOf(idAct, idCli)
+        val cursor = db.rawQuery(query,selectionArgs)
+        var resultado = "0"
+        try {
+            if (cursor.moveToFirst()) {
+                resultado = "1"
+            }
+        }
+        catch (e: Exception) {
+            Log.e("DatabaseError", "Error al validar el pago de la actividad")
+            e.printStackTrace()
+        }
+        finally {
+            cursor.close()
+            db.close()
+        }
+        return resultado
+    }
+
+
     fun obtenerDetallesUltPago(id : Int) : PaymentDetails? {
         val db = this.readableDatabase
         val query = """

@@ -16,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mediadocena.clubdeportivo.database.ClubDatabaseHelper
 import com.mediadocena.clubdeportivo.entities.Cuota
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class AbonarCuotaSocioActivity : AppCompatActivity() {
 
@@ -62,71 +63,99 @@ class AbonarCuotaSocioActivity : AppCompatActivity() {
         val btnRegistrarPago = findViewById<Button>(R.id.btnRegPago)
         val errorAbonoSocio = findViewById<LinearLayoutCompat>(R.id.errorAbonoSocio)
         btnRegistrarPago.setOnClickListener{
-
             val cuota: Cuota // INSTANCIA CLASE CUOTA
             val datos = ClubDatabaseHelper(this) // INSTANCIA DE DB
-
             var cantidadCuotas = 0 // Se asigna al valuar la forma de pago
 
-            // Variables para instanciar un objeto CUOTA
-            val fechaPago: LocalDate = LocalDate.now()
-            var montoPago: Double = 18000.00 // Variable que puede cambiar dependiendo la promocion
-            val formaPago: String = cboFormaPago.selectedItem.toString()
-            val fechaVence: LocalDate = LocalDate.now().plusDays(30)
-            var tienePromo: Boolean = false // Variable que puede cambiar dependiendo la forma de pago
-            val detallePago: String = "Abono de cuota Societaria"
-
-
-            if (formaPago == "Forma de Pago") {
-                Snackbar.make(errorAbonoSocio, "Error: Debe seleccionar una forma de pago valida.", Snackbar.LENGTH_SHORT)
-                    .setBackgroundTint(Color.RED)
-                    .setTextColor(Color.WHITE)
-                    .show()
+            // SE VALIDA SI EL SOCIO TIENE CUOTA VIGENTE CON LA FECHA OBTENIDA
+            var bandera : Int? // Creamos un variable para usarlo de bandera
+            var queryVencimiento = datos.ObtenerUltimoVencimientoSocio(idCliente)
+            // Validamos resultado y asignamos valor a la bandera
+            if (queryVencimiento == "0") {
+                bandera = 1
             }
             else {
-                when (formaPago) {
-                    "Tarjeta 3 Cuotas (5% OFF, sin interes)" -> {
-                        tienePromo = true
-                        cantidadCuotas = 3
-                    }
-                    "Tarjeta 6 Cuotas (10% OFF, sin interes)" -> {
-                        tienePromo = true
-                        cantidadCuotas = 6
-                    }
-                }
-                // Instanciamos un objeto de la clase cuota
-                cuota = Cuota(
-                    idCliente,
-                    fechaPago,
-                    montoPago,
-                    formaPago,
-                    fechaVence,
-                    tienePromo,
-                    detallePago
-                )
-                cuota.aplicarPromocion(cantidadCuotas) // Aplicamos el metodo de la clase cuotas para modificar el monto
-                // Ejecutamos el registro de pago en la base de datos y obtenemos un resultado
-                val resultado = datos.registrarPago(
-                    cuota.idCliente,
-                    cuota.fecha.toString(),
-                    cuota.monto,
-                    cuota.formaPago,
-                    cuota.fechaVencimiento.toString(),
-                    cuota.tienePromo,
-                    cuota.detalle
-                )
-                // Evaluamos si el insert fue exitoso
-                if (resultado != -1L) {
-                    val intent = Intent (this, AbonoExitoso::class.java)
-                    intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
-                    startActivity(intent)
+                var conversion = LocalDate.parse(queryVencimiento, DateTimeFormatter.ISO_DATE)
+                if (conversion < LocalDate.now()) {
+                    bandera = 1
                 }
                 else {
-                    Snackbar.make(errorAbonoSocio, "Error: No se pudo registrar el pago correctamente.", Snackbar.LENGTH_SHORT)
+                    bandera = 0
+                }
+            }
+            // Segun el valor de la bandera se proce o no al pago.
+            if (bandera == 1) {
+                // Variables para instanciar un objeto CUOTA
+                val fechaPago: LocalDate = LocalDate.now()
+                var montoPago: Double = 18000.00 // Variable que puede cambiar dependiendo la promocion
+                val formaPago: String = cboFormaPago.selectedItem.toString()
+                val fechaVence: LocalDate = LocalDate.now().plusDays(30)
+                var tienePromo: Boolean = false // Variable que puede cambiar dependiendo la forma de pago
+                val detallePago: String = "Abono de cuota Societaria"
+
+                // Validamos la forma de pago
+                if (formaPago == "Forma de Pago") {
+                    Snackbar.make(errorAbonoSocio, "Error: Debe seleccionar una forma de pago valida.", Snackbar.LENGTH_SHORT)
                         .setBackgroundTint(Color.RED)
                         .setTextColor(Color.WHITE)
                         .show()
                 }
+                else {
+                    when (formaPago) {
+                        "Tarjeta 3 Cuotas (5% OFF, sin interes)" -> {
+                            tienePromo = true
+                            cantidadCuotas = 3
+                        }
+
+                        "Tarjeta 6 Cuotas (10% OFF, sin interes)" -> {
+                            tienePromo = true
+                            cantidadCuotas = 6
+                        }
+                    }
+                    // Instanciamos un objeto de la clase cuota
+                    cuota = Cuota(
+                        idCliente,
+                        fechaPago,
+                        montoPago,
+                        formaPago,
+                        fechaVence,
+                        tienePromo,
+                        detallePago
+                    )
+                    cuota.aplicarPromocion(cantidadCuotas) // Aplicamos el metodo de la clase cuotas para modificar el monto
+                    // Ejecutamos el registro de pago en la base de datos y obtenemos un resultado
+                    val resultado = datos.registrarPago(
+                        cuota.idCliente,
+                        cuota.fecha.toString(),
+                        cuota.monto,
+                        cuota.formaPago,
+                        cuota.fechaVencimiento.toString(),
+                        cuota.tienePromo,
+                        cuota.detalle
+                    )
+                    // Evaluamos si el insert fue exitoso
+                    if (resultado != -1L) {
+                        val intent = Intent(this, AbonoExitoso::class.java)
+                        intent.putExtra("ID_CLIENTE", cuota.idCliente) // ENVIO ID CLIENTE
+                        startActivity(intent)
+                    } else {
+                        Snackbar.make(
+                            errorAbonoSocio,
+                            "Error: No se pudo registrar el pago correctamente.",
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .setBackgroundTint(Color.RED)
+                            .setTextColor(Color.WHITE)
+                            .show()
+                    }
+                }
+            }
+            else {
+                Snackbar.make(errorAbonoSocio,"AVISO: El abono mensual sigue vigente. " +
+                        "No se puede proceder a un nuevo pago.", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.RED)
+                    .setTextColor(Color.WHITE)
+                    .show()
             }
         }
     }
